@@ -1,70 +1,46 @@
-# Getting Started with Create React App
+# React VirtualSky
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Its react version of [VirtualSky](https://github.com/slowe/VirtualSky).
 
-## Available Scripts
 
-In the project directory, you can run:
+## Usage
 
-### `yarn start`
+```jsx
+export default class App extends React.Component {
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+  const azOff = 0;
+  const height = 500;
+  const width = 500;
+  const latitude = 51.746449;
+  const longitude = 19.620693;
+  const time = new Date();
+  const config = projectionsConfig(args.width, args.height-50, args.latitude, args.longitude, args.time)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+  render() {
+    return <VirtualSky id="startmap" config={config} azOff={args.azOff}/>
+  }
+}
+```
 
-### `yarn test`
+## Development
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+cd react-trello/
+yarn install
+yarn run storybook
+```
 
-### `yarn build`
+### Scripts
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1.  `yarn run lint` : Lint all js files
+2.  `yarn run lintfix` : fix linting errors of all js files
+3.  `yarn run semantic-release` : make a release. Leave it for CI to do.
+4.  `yarn run storybook`: Start developing by using storybook
+5.  `yarn run test` : Run tests. tests file should be written as `*.test.js` and using ES2015
+6.  `yarn run test:watch` : Watch tests while writing
+7.  `yarn run test:cover` : Show coverage report of your tests
+8.  `yarn run test:report` : Report test coverage to codecov.io. Leave this for CI
+9.  `yarn run build`: transpile all ES6 component files into ES5(commonjs) and put it in `dist` directory
+10. `yarn run docs`: create static build of storybook in `docs` directory that can be used for github pages
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Learn how to write stories [here](https://storybook.js.org/basics/writing-stories/)

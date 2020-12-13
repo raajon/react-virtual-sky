@@ -28,9 +28,9 @@ export const getPlanets = (projection, azOff, config) =>{
         planets.push(planet);
   			for(let i = 0 ; i < p[2].length-4 ; i+=4){
           const point = radec2xy(p[2][i+1]*d2r, p[2][i+2]*d2r, projection, azOff, config)
-          // if(typeof point === "object"){
+          if(typeof point === "object"){
             planet.orbit.push(point);
-          // }
+          }
         }
       }
     }
@@ -52,7 +52,6 @@ export const drawPlanetOrbits = (svg, planets) =>{
     .y(d =>{ return d.y; })
     .interpolate("linear");
   planets.forEach((planet, i) => {
-    console.log(planet)
     svg.append("path")
         .attr("d", lineFunction(planet.orbit))
         .attr("stroke", planet.color)
