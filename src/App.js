@@ -1,23 +1,29 @@
+import React, {useState} from 'react';
+import useWindowDimensions from './hooks/useWindowDimensions.js';
 import logo from './logo.svg';
 import './App.css';
+import VirtualSky from './VirtualSky/VirtualSky.js';
+import projectionsConfig from './VirtualSky/projectionsConfig.js';
 
-function App() {
+const App = () =>{
+  const [azOff, setAzOff] = useState(270);
+  const { height, width } = useWindowDimensions();
+  const latitude = 51.746449;
+  const longitude = 19.620693;
+  // const longitude = 31.746449;
+  // const latitude = 19.620693;
+  const time = new Date();
+
+  const update = () =>{
+    setAzOff(azOff+10);
+  }
+
+  const config = projectionsConfig(width, height-50, latitude, longitude, time)
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <VirtualSky id="startmap" config={config} azOff={azOff}/>
+      <button onClick={update}>update</button>
     </div>
   );
 }
