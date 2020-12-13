@@ -12,20 +12,27 @@ export default {
     width: { control: 'number' },
     latitude: { control: 'number' },
     longitude: { control: 'number' },
-    time: { control: 'date' },
+    time: { control: 'date' }
   },
 };
 
 const Template = (args) =>   {
-  const config = projectionsConfig(args.width, args.height, args.latitude, args.longitude, args.time)
-  return <VirtualSky id="startmap" config={config} azOff={args.azOff}/>
+  const config = {
+    azOff: args.azOff,
+    height: args.height,
+    width: args.width,
+    latitude: args.latitude,
+    longitude: args.longitude,
+    time: args.time
+  }
+  return <VirtualSky id="startmap" config={config}/>
 };
 
 export const Primary = Template.bind({});
 Primary.args = {
   azOff: 0,
-  height: null,
-  width: null,
+  height: 500,
+  width: 560,
   latitude: 51.746449,
   longitude: 19.620693,
   time: new Date()

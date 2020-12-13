@@ -8,16 +8,17 @@ Its react version of [VirtualSky](https://github.com/slowe/VirtualSky).
 ```jsx
 export default class App extends React.Component {
 
-  const azOff = 0;
-  const height = 500;
-  const width = 500;
-  const latitude = 51.746449;
-  const longitude = 19.620693;
-  const time = new Date();
-  const config = projectionsConfig(args.width, args.height-50, args.latitude, args.longitude, args.time)
+  const config={
+    azOff: 0,
+    height: 500,
+    width: 500,
+    latitude: 51.746449,
+    longitude: 19.620693,
+    time: new Date()
+  }
 
   render() {
-    return <VirtualSky id="startmap" config={config} azOff={args.azOff}/>
+    return <VirtualSky id="startmap" config={config}/>
   }
 }
 ```
@@ -25,7 +26,6 @@ export default class App extends React.Component {
 ## Development
 
 ```
-cd react-trello/
 yarn install
 yarn run storybook
 ```

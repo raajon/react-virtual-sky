@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useLayoutEffect, useState} from 'react';
 import d3 from 'd3'
-import useWindowDimensions from '../hooks/useWindowDimensions.js';
+import projectionsConfig from '../VirtualSky/projectionsConfig.js';
 import {getGrids, drawGrids} from './grids.js';
 import {getStars, drawStars} from './stars.js';
 import {getPlanets, drawPlanets, drawPlanetOrbits} from './planets.js';
@@ -8,24 +8,13 @@ import {stereo} from './projections.js'
 
 const VirtualSky = (props) => {
   const targetRef = useRef();
-  // const [dimensions, setDimensions] = useState({ width:0, height: 0 });
-  // const screenSize = useWindowDimensions();
-  const config = props.config;
-  const azOff = props.azOff;
-  // const width = config.width || screenSize.width;
-  // const height = config.height || screenSize.height;
-  // config.width = width;
-  // config.height = height;
+  const config = projectionsConfig(props.config.width, props.config.height, props.config.latitude, props.config.longitude, props.config.time)
+  const azOff = props.config.azOff;
 
   useLayoutEffect(() => {
     if (targetRef.current) {
-console.log(targetRef.current, targetRef.current.offsetWidth, targetRef.current.offsetHeight)
       config.width = config.width || targetRef.current.offsetWidth;
       config.height = config.height || targetRef.current.offsetHeight;
-      // setDimensions({
-      //   width: targetRef.current.offsetWidth,
-      //   height: targetRef.current.offsetHeight
-      // });
     }
   }, []);
 
