@@ -28,7 +28,7 @@ const Template = (args) =>   {
 
 export const Primary = Template.bind({});
 Primary.args = {
-  azOff: 200,
+  azOff: 150,
   height: 500,
   width: 560,
   latitude: 51.746449,
