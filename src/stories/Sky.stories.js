@@ -1,9 +1,7 @@
 import React from 'react';
 import VirtualSky from '../VirtualSky/VirtualSky.js';
-import projectionsConfig from '../VirtualSky/projectionsConfig.js';
 
-
-export default {
+const story = {
   title: 'Example/VirtualSky',
   component: VirtualSky,
   argTypes: {
@@ -23,17 +21,19 @@ const Template = (args) =>   {
     width: args.width,
     latitude: args.latitude,
     longitude: args.longitude,
-    time: args.time
+    time: new Date(args.time)
   }
   return <VirtualSky id="startmap" config={config}/>
 };
 
 export const Primary = Template.bind({});
 Primary.args = {
-  azOff: 0,
+  azOff: 200,
   height: 500,
   width: 560,
   latitude: 51.746449,
   longitude: 19.620693,
   time: new Date(2020, 11, 24, 20, 0, 0, 0)
 };
+
+export default story;

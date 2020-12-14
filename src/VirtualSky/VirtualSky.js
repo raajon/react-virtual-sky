@@ -1,8 +1,9 @@
-import React, {useEffect, useRef, useLayoutEffect, useState} from 'react';
+import React, {useEffect, useRef, useLayoutEffect} from 'react';
 import d3 from 'd3'
 import projectionsConfig from '../VirtualSky/projectionsConfig.js';
 import {getGrids, drawGrids} from './grids.js';
 import {getStars, drawStars} from './stars.js';
+import {getMoonAndSun, drawMoonAndSun} from './sunAndMoon.js';
 import {getPlanets, drawPlanets, drawPlanetOrbits} from './planets.js';
 import {stereo} from './projections.js'
 
@@ -16,16 +17,17 @@ const VirtualSky = (props) => {
       config.width = config.width || targetRef.current.offsetWidth;
       config.height = config.height || targetRef.current.offsetHeight;
     }
-  }, []);
+  }, [config]);
 
   useEffect(() => {
     const gridAz = getGrids(stereo, azOff, config);
     const stars = getStars(stereo, azOff, config);
     const planets = getPlanets(stereo, azOff, config);
-    draw(stars, gridAz, planets);
+    const {moon, sun} = getMoonAndSun(stereo, azOff, config);
+    draw(stars, gridAz, planets, moon, sun);
   });
 
-  const draw = (stars, gridAz, planets) =>{
+  const draw = (stars, gridAz, planets, moon, sun) =>{
     d3.select("#" + props.id).select("svg").remove();
     const svg = d3.select("#" + props.id).append("svg").attr("width", config.width).attr("height", config.height).style("background", "black");
     if(gridAz){ drawGrids(svg, gridAz); }
@@ -34,6 +36,7 @@ const VirtualSky = (props) => {
       drawPlanets(svg, planets);
       drawPlanetOrbits(svg, planets);
     }
+    drawMoonAndSun(svg, moon, sun)
   }
 
   return (

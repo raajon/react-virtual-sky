@@ -1,6 +1,56 @@
 const d2r = Math.PI/180;
 const r2d = 180.0/Math.PI;
 
+// Convert Ecliptic coordinates to x,y position
+// Inputs: l (rad), b (rad), local sidereal time
+// Returns [x, y (,elevation)]
+export const ecliptic2xy = (l,b, projection, az_off, config) =>{
+	var pos;
+		// if(this.fullsky){
+		// 	pos = this.ecliptic2radec(l,b);
+		// 	return this.radec2xy(pos.ra,pos.dec);
+		// }else{
+			pos = ecliptic2azel(l,b,config);
+			var el = pos.el*r2d;
+			pos = azel2xy(pos.az-(az_off*d2r), pos.el, projection, az_off, config);
+			pos.el = el;
+			return pos;
+		// }
+};
+
+// Take input in radians, decimal Sidereal Time and decimal latitude
+// Uses method defined in Practical Astronomy (4th ed) by Peter Duffet-Smith and Jonathan Zwart
+const ecliptic2azel = (l,b,config,lat) =>{
+	const LST = config.astronomicalTimes.LST;
+	const JD = config.astronomicalTimes.JD;
+	if(!lat) lat = config.latitude.rad;
+	var sl,cl,sb,cb,v,e,ce,se,Cprime,s,ST,cST,sST,B,r,sphi,cphi,A,w,theta,psi;
+	sl = Math.sin(l);
+	cl = Math.cos(l);
+	sb = Math.sin(b);
+	cb = Math.cos(b);
+	v = [cl*cb,sl*cb,sb];
+	e = meanObliquity(JD);
+	ce = Math.cos(e);
+	se = Math.sin(e);
+	Cprime = [[1.0,0.0,0.0],[0.0,ce,-se],[0.0,se,ce]];
+	s = vectorMultiply(Cprime,v);
+	ST = LST*15*d2r;
+	cST = Math.cos(ST);
+	sST = Math.sin(ST);
+	B = [[cST,sST,0],[sST,-cST,0],[0,0,1]];
+	r = vectorMultiply(B,s);
+	sphi = Math.sin(lat);
+	cphi = Math.cos(lat);
+	A = [[-sphi,0,cphi],[0,-1,0],[cphi,0,sphi]];
+	w = vectorMultiply(A,r);
+	theta = Math.atan2(w[1],w[0]);
+	psi = Math.asin(w[2]);
+	return {az:theta,el:psi};
+};
+// Convert RA,Dec -> X,Y
+// Inputs: RA (rad), Dec (rad)
+// Returns [x, y (,elevation)]
 export const radec2xy = (ra,dec, projection, az_off, config) =>{
 	var coords = coord2horizon(ra, dec, config);
 	// Only return coordinates above the horizon
@@ -11,7 +61,9 @@ export const radec2xy = (ra,dec, projection, az_off, config) =>{
 	return 0;
 };
 
-
+// Convert AZ,EL -> X,Y
+// Inputs: az (degrees), el (degrees), width (px), height (px)
+// Output: { x: x, y: y }
 export const azel2xy = (az,el, projection, az_off, config) =>{
     var pos = projection.azel2xy(az-(az_off*d2r),el, config.width, config.height);
     return {x:pos.x,y:pos.y};
@@ -96,3 +148,23 @@ export const interpolate = (jd,data) =>{
 	}
 	return { ra: dra, dec:ddec, mag:dmag};
 }
+
+const vectorMultiply = (A,B) =>{
+	if(B.length > 0){
+		// 2D (3x3)x(3x3) or 1D (3x3)x(3x1)
+		if(B[0].length > 0) return [[(A[0][0]*B[0][0]+A[0][1]*B[1][0]+A[0][2]*B[2][0]),(A[0][0]*B[0][1]+A[0][1]*B[1][1]+A[0][2]*B[2][1]),(A[0][0]*B[0][2]+A[0][1]*B[1][2]+A[0][2]*B[2][2])],
+									[(A[1][0]*B[0][0]+A[1][1]*B[1][0]+A[1][2]*B[2][0]),(A[1][0]*B[0][1]+A[1][1]*B[1][1]+A[1][2]*B[2][1]),(A[1][0]*B[0][2]+A[1][1]*B[1][2]+A[1][2]*B[2][2])],
+									[(A[2][0]*B[0][0]+A[2][1]*B[1][0]+A[2][2]*B[2][0]),(A[2][0]*B[0][1]+A[2][1]*B[1][1]+A[2][2]*B[2][1]),(A[2][0]*B[0][2]+A[2][1]*B[1][2]+A[2][2]*B[2][2])]];
+		else return [(A[0][0]*B[0] + A[0][1]*B[1] + A[0][2]*B[2]),(A[1][0]*B[0] + A[1][1]*B[1] + A[1][2]*B[2]),(A[2][0]*B[0] + A[2][1]*B[1] + A[2][2]*B[2])];
+	}
+};
+
+// Input is Julian Date
+// Uses method defined in Practical Astronomy (4th ed) by Peter Duffet-Smith and Jonathan Zwart
+const meanObliquity = (JD) =>{
+	var T,T2,T3;
+	T = (JD-2451545.0)/36525;	// centuries since 2451545.0 (2000 January 1.5)
+	T2 = T*T;
+	T3 = T2*T;
+	return (23.4392917 - 0.0130041667*T - 0.00000016667*T2 + 0.0000005027778*T3)*d2r;
+};
