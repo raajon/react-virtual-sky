@@ -1,5 +1,8 @@
 # React VirtualSky
 
+[![Build Status](https://travis-ci.org/raajon/react-virtual-sky.svg?branch=master)](https://travis-ci.org/raajon/react-virtual-sky)
+
+
 Its react version of [VirtualSky](https://github.com/slowe/VirtualSky).
 
 
