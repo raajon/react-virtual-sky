@@ -35,5 +35,5 @@ Primary.args = {
   width: 560,
   latitude: 51.746449,
   longitude: 19.620693,
-  time: new Date()
+  time: new Date(2020, 11, 24, 20, 0, 0, 0)
 };
