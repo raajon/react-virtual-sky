@@ -31,8 +31,8 @@ export const drawGrids = (svg, gridAz) =>{
   gridAz.forEach((line, i) => {
       svg.append("path")
           .attr("d", lineFunction(line))
-          .attr("stroke", "blue")
-          .attr("stroke-width", 2)
+          .attr("stroke", "#44f6")
+          .attr("stroke-width", 1)
           .attr("fill", "none");
    });
 }
