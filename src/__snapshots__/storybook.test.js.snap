@@ -17,3 +17,21 @@ exports[`Storyshots Example/VirtualSky Primary 1`] = `
   />
 </div>
 `;
+
+exports[`Storyshots Example/VirtualSky Virtual Sky Example 1`] = `
+<div
+  style={
+    Object {
+      "bottom": "0px",
+      "left": "0px",
+      "position": "absolute",
+      "right": "0px",
+      "top": "0px",
+    }
+  }
+>
+  <div
+    id="startmap"
+  />
+</div>
+`;

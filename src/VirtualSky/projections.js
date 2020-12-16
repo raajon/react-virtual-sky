@@ -12,7 +12,9 @@ export const ecliptic2xy = (l,b, projection, az_off, config) =>{
 		// }else{
 			pos = ecliptic2azel(l,b,config);
 			var el = pos.el*r2d;
-			pos = azel2xy(pos.az-(az_off*d2r), pos.el, projection, az_off, config);
+			// pos = azel2xy(pos.az-(az_off*d2r), pos.el, projection, az_off, config);
+			pos = projection.azel2xy(pos.az-(az_off*d2r), pos.el, config.width, config.height);
+
 			pos.el = el;
 			return pos;
 		// }
@@ -167,4 +169,31 @@ const meanObliquity = (JD) =>{
 	T2 = T*T;
 	T3 = T2*T;
 	return (23.4392917 - 0.0130041667*T - 0.00000016667*T2 + 0.0000005027778*T3)*d2r;
+};
+
+
+// Convert from B1875 to J2000
+// Using B = 1900.0 + (JD − 2415020.31352) / 365.242198781 and p73 Practical Astronomy With A Calculator
+export const fk1tofk5 = (a,b) =>{
+	// Convert from B1875 -> J2000
+	return Transform([a,b], [0.9995358730015703, -0.02793693620138929, -0.012147682028606801, 0.027936935758478665, 0.9996096732234282, -0.00016976035344812515, 0.012147683047201562, -0.00016968744936278707, 0.9999261997781408]);
+};
+
+// Input is a two element position (degrees) and rotation matrix
+// Output is a two element position (degrees)
+const Transform = (p, rot, indeg) =>{
+	if(indeg){
+		p[0] *= this.d2r;
+		p[1] *= this.d2r;
+	}
+	var cp1 = Math.cos(p[1]);
+	var m = [Math.cos(p[0])*cp1, Math.sin(p[0])*cp1, Math.sin(p[1])];
+	var s = [m[0]*rot[0] + m[1]*rot[1] + m[2]*rot[2], m[0]*rot[3] + m[1]*rot[4] + m[2]*rot[5], m[0]*rot[6] + m[1]*rot[7] + m[2]*rot[8] ];
+	var r = Math.sqrt(s[0]*s[0] + s[1]*s[1] + s[2]*s[2]);
+	var b = Math.asin(s[2]/r); // Declination in range -90 -> +90
+	var cb = Math.cos(b);
+	var a = Math.atan2(((s[1]/r)/cb),((s[0]/r)/cb));
+	if (a < 0) a += Math.PI*2;
+	if(indeg) return [a*r2d,b*r2d];
+	else return [a,b];
 };

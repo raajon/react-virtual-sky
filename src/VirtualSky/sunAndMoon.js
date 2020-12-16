@@ -18,8 +18,8 @@ export const getMoonAndSun = (projection, azOff, config) =>{
   const m = moonPos(JD, s)
   const moon = ecliptic2xy(m.lon*d2r, m.lat*d2r, projection, azOff, config);
   return{
-    sun:{...sun, r:15, colour:"yellow"},
-    moon:{...moon, r:15, colour:"rgb(153,153,153)"}
+    sun:{...sun, r:10, colour:"yellow"},
+    moon:{...moon, r:10, colour:"rgb(153,153,153)"}
   }
 }
 

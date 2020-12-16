@@ -4,6 +4,7 @@ import projectionsConfig from '../VirtualSky/projectionsConfig.js';
 import {getConstellationLines, drawConstellationLines} from './constellationLines.js';
 import {getGalaxy, drawGalaxy} from './galaxy.js';
 import {getGrids, drawGrids} from './grids.js';
+import {getBoundaries, drawBoundaries} from './constllationBoundaries.js';
 import {getStars, drawStars} from './stars.js';
 import {getMoonAndSun, drawMoonAndSun} from './sunAndMoon.js';
 import {getPlanets, drawPlanets, drawPlanetOrbits} from './planets.js';
@@ -11,8 +12,9 @@ import {stereo} from './projections.js'
 
 const VirtualSky = (props) => {
   const targetRef = useRef();
-  const config = projectionsConfig(props.config.width, props.config.height, props.config.latitude, props.config.longitude, props.config.time)
-  const azOff = props.config.azOff;
+  const time = props.config.time || new Date()
+  const config = projectionsConfig(props.config.width, props.config.height, props.config.latitude, props.config.longitude, time)
+  const azOff = (props.config.azOff%360)-180;
 
   useLayoutEffect(() => {
     if (targetRef.current) {
@@ -25,19 +27,20 @@ const VirtualSky = (props) => {
     const galaxy = getGalaxy(stereo, azOff, config);
     const gridAz = getGrids(stereo, azOff, config);
     const constellationLines = getConstellationLines(stereo, azOff, config);
+    const constellationBoundaries = getBoundaries(stereo, azOff, config);
     const stars = getStars(stereo, azOff, config);
     const planets = getPlanets(stereo, azOff, config);
     const {moon, sun} = getMoonAndSun(stereo, azOff, config);
-    draw(galaxy, stars, constellationLines, gridAz, planets, moon, sun);
+    draw(galaxy, stars, constellationLines, constellationBoundaries, gridAz, planets, moon, sun);
   });
 
-  const draw = (galaxy, stars, constellationLines, gridAz, planets, moon, sun) =>{
+  const draw = (galaxy, stars, constellationLines, constellationBoundaries, gridAz, planets, moon, sun) =>{
     d3.select("#" + props.id).select("svg").remove();
     const svg = d3.select("#" + props.id).append("svg").attr("width", config.width).attr("height", config.height).style("background", "black");
     if(galaxy){ drawGalaxy(svg, galaxy); }
     if(gridAz){ drawGrids(svg, gridAz); }
     if(constellationLines){ drawConstellationLines(svg, constellationLines); }
-
+    if(constellationBoundaries){ drawBoundaries(svg, constellationBoundaries); }
     if(stars){ drawStars(svg, stars); }
     if(planets){
       drawPlanets(svg, planets);

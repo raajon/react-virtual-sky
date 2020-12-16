@@ -28,12 +28,22 @@ const Template = (args) =>   {
 
 export const Primary = Template.bind({});
 Primary.args = {
-  azOff: 150,
+  azOff: 180,
   height: 500,
   width: 560,
-  latitude: 51.746449,
-  longitude: 19.620693,
-  time: new Date(2020, 11, 24, 20, 0, 0, 0)
+  latitude: 51.7462699,
+  longitude: 19.5051337,
+  time: new Date()
+};
+
+export const VirtualSkyExample = Template.bind({});
+VirtualSkyExample.args = {
+  azOff: 180,
+  height: 350,
+  width: 500,
+  latitude: 34.4326,
+  longitude: 119.86286000000001,
+  time: new Date()
 };
 
 export default story;

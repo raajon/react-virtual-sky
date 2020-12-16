@@ -45,7 +45,7 @@ const astronomicalTimes = (clock,lon) =>{
 
 const getJD = (clock) =>{
 	// The Julian Date of the Unix Time epoch is 2440587.5
-	if(!clock) clock = new Date();
+	// if(!clock) clock = new Date();
 	return ( clock.getTime() / 86400000.0 ) + 2440587.5;
 };
 
