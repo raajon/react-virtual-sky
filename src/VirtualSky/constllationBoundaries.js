@@ -55,7 +55,7 @@ export const getBoundaries = (projection, azOff, config) =>{
 				for(let i = 0; i <= points.length; i++){
 					j = (i === points.length) ? 0 : i;
           posb = radec2xy(points[j].x, points[j].y, projection, azOff, config);
-					if(posa && isVisible(posa.el) && isVisible(posb.el) && points[j].move){
+					if(posa && (isVisible(posa, config) || isVisible(posb, config)) && points[j].move){
 						if(!isPointBad(posa) && !isPointBad(posb)){
 		    			boundaries.push({posa, posb});
 						}
@@ -66,12 +66,10 @@ export const getBoundaries = (projection, azOff, config) =>{
   return boundaries;
 }
 
-
-const isVisible = (p) =>{//TODO: implement this
-  return true;
+const isVisible = (p, config) =>{
+  return p.x>=0 && p.y>=0 && p.x<=config.width && p.y<=config.height;
 };
 const isPointBad = (p) =>{
-	// return p.x==-1 && p.y==-1;
 	return typeof p !== "object";
 };
 
@@ -83,7 +81,7 @@ export const drawBoundaries = (svg, lines) =>{
   lines.forEach((line, i) => {
       svg.append("path")
           .attr("d", lineFunction([line.posa, line.posb]))
-          .attr("stroke", "#fff4")
+          .attr("stroke", "#ff84")
           .attr("stroke-width", 1)
           .attr("fill", "none");
    });

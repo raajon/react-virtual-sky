@@ -14,7 +14,7 @@ export const getStars = (stereo, azOff, config) =>{
     star = {...star , ...radec2xy(star.ra, star.dec, stereo, azOff, config)};
     stars.push(star);
   });
-  return stars.filter(s=>(s.x>0 && s.y>0));
+  return stars.filter(s=>(s.x>0 && s.y>0 && s.x<=config.width && s.y<=config.height));
 }
 
 export const drawStars = (svg, stars) =>{

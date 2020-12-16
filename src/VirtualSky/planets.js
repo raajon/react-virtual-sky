@@ -26,10 +26,14 @@ export const getPlanets = (projection, azOff, config) =>{
           ...radec2xy(interp.ra*d2r, interp.dec*d2r, projection, azOff, config)
         }
         planets.push(planet);
+        let o = 0;
+        planet.orbit[o] = []
   			for(let i = 0 ; i < p[2].length-4 ; i+=4){
           const point = radec2xy(p[2][i+1]*d2r, p[2][i+2]*d2r, projection, azOff, config)
           if(typeof point === "object"){
-            planet.orbit.push(point);
+            planet.orbit[o].push(point);
+          }else{
+            planet.orbit[++o] = [];
           }
         }
       }
@@ -52,11 +56,13 @@ export const drawPlanetOrbits = (svg, planets) =>{
     .y(d =>{ return d.y; })
     .interpolate("linear");
   planets.forEach((planet, i) => {
-    svg.append("path")
-        .attr("d", lineFunction(planet.orbit))
-        .attr("stroke", planet.color)
-        .attr("stroke-width", 1)
-        .attr("fill", "none");
+    planet.orbit.forEach((part, j) => {
+      svg.append("path")
+          .attr("d", lineFunction(part))
+          .attr("stroke", planet.color)
+          .attr("stroke-width", 1)
+          .attr("fill", "none");
+    });    
   });
 }
 

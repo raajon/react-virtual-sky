@@ -34,14 +34,9 @@ export const getConstellationLines = (projection, azOff, config) =>{
         if(a >= 0 && b >= 0 && a < starsConstellationDefinitions.length && b < starsConstellationDefinitions.length){
           const posa = radec2xy(starsConstellationDefinitions[a][2]*d2r, starsConstellationDefinitions[a][3]*d2r, projection, azOff, config);
           const posb = radec2xy(starsConstellationDefinitions[b][2]*d2r, starsConstellationDefinitions[b][3]*d2r, projection, azOff, config);
-          if(isVisible(posa.el) && isVisible(posb.el)){
+          if(isVisible(posa, config) && isVisible(posb, config)){
             if(!isPointBad(posa) && !isPointBad(posb)){
               lines.push({posa, posb});
-        //       // Basic error checking: constellations behind us often have very long lines so we'll zap them
-        //       if(Math.abs(posa.x-posb.x) < maxl && Math.abs(posa.y-posb.y) < maxl){
-        //         x.moveTo(posa.x,posa.y);
-        //         x.lineTo(posb.x,posb.y);
-        //       }
             }
           }
         }
@@ -59,16 +54,15 @@ export const drawConstellationLines = (svg, lines) =>{
       svg.append("path")
           .attr("d", lineFunction([line.posa, line.posb]))
           .attr("stroke", "#fff4")
-          .attr("stroke-width", 1)
+          .attr("stroke-width", 2)
           .attr("fill", "none");
    });
 }
 
-const isVisible = (p) =>{//TODO: implement this
-  return true;
+const isVisible = (p, config) =>{
+  return p.x>=0 && p.y>=0 && p.x<=config.width && p.y<=config.height;
 };
 const isPointBad = (p) =>{
-	// return p.x==-1 && p.y==-1;
 	return typeof p !== "object";
 };
 
