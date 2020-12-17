@@ -18,6 +18,7 @@ export const getPlanets = (projection, azOff, config) =>{
       if(jd > p[2][0] && jd < p[2][(p[2].length-4)]){
         const interp = interpolate(jd,p[2]);
         const planet = {
+          name: p[0],
           orbit: [],
           ra: interp.ra,
           dev: interp.dec,
@@ -62,8 +63,20 @@ export const drawPlanetOrbits = (svg, planets) =>{
           .attr("stroke", planet.color)
           .attr("stroke-width", 1)
           .attr("fill", "none");
-    });    
+    });
   });
+}
+
+export const drawPlanetLabels = (svg, planets) =>{
+console.log(planets)
+    svg.selectAll("rect").data(planets).enter().append("svg:text")
+      .attr("x", (d) =>{ return d.x; })
+      .attr("y", (d) =>{ return d.y; })
+      .attr("dx", (d) =>{ return 5; })
+      .attr("fill", (d) =>{ return d.color; })
+      .attr("font-size", ".7em")
+      .attr("font-family", "Arial")
+      .text( (d) =>{ return d.name; });
 }
 
 

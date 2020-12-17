@@ -10,7 +10,17 @@ const story = {
     width: { control: 'number' },
     latitude: { control: 'number' },
     longitude: { control: 'number' },
-    time: { control: 'date' }
+    time: { control: 'date' },
+    starMag: { control: 'number' },
+    showPlanets: { control: 'boolean' },
+    showPlanetsOrbit: { control: 'boolean' },
+    showPlanetsLabels: { control: 'boolean' },
+    showSunMoon: { control: 'boolean' },
+    showConstellations: { control: 'boolean' },
+    showConstellationBoundaries: { control: 'boolean' },
+    showConstellationLabels: { control: 'boolean' },
+    showAzGrid: { control: 'boolean' },
+    showGalaxy: { control: 'boolean' }
   },
 };
 
@@ -21,7 +31,19 @@ const Template = (args) =>   {
     width: args.width,
     latitude: args.latitude,
     longitude: args.longitude,
-    time: new Date(args.time)
+    time: new Date(args.time),
+    visibility:{
+      starMag : args.starMag,
+      showPlanets: args.showPlanets,
+      showPlanetsOrbit: args.showPlanetsOrbit,
+      showPlanetsLabels: args.showPlanetsLabels,
+      showSunMoon: args.showSunMoon,
+      showConstellations: args.showConstellations,
+      showConstellationBoundaries: args.showConstellationBoundaries,
+      showConstellationLabels: args.showConstellationLabels,
+      showAzGrid: args.showAzGrid,
+      showGalaxy: args.showGalaxy
+    }
   }
   return <VirtualSky id="startmap" config={config}/>
 };
@@ -33,7 +55,17 @@ Primary.args = {
   width: 560,
   latitude: 51.7462699,
   longitude: 19.5051337,
-  time: new Date()
+  time: new Date(),
+  starMag:6,
+  showPlanets: true,
+  showPlanetsOrbit: true,
+  showPlanetsLabels: true,
+  showSunMoon: true,
+  showConstellations: true,
+  showConstellationBoundaries: true,
+  showConstellationLabels: true,
+  showAzGrid: true,
+  showGalaxy: true
 };
 
 export const VirtualSkyExample = Template.bind({});
@@ -43,7 +75,17 @@ VirtualSkyExample.args = {
   width: 500,
   latitude: 34.4326,
   longitude: 119.86286000000001,
-  time: new Date()
+  time: new Date(),
+  starMag:6,
+  showPlanets: true,
+  showPlanetsOrbit: true,
+  showPlanetsLabels: true,
+  showSunMoon: true,
+  showConstellations: true,
+  showConstellationBoundaries: true,
+  showConstellationLabels: true,
+  showAzGrid: true,
+  showGalaxy: true
 };
 
 export default story;

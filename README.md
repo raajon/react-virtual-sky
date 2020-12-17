@@ -17,7 +17,17 @@ export default class App extends React.Component {
     width: 500,
     latitude: 51.746449,
     longitude: 19.620693,
-    time: new Date()
+    time: new Date(),
+    starMag: 6,
+    showPlanets: true,
+    showPlanetsOrbit: true,
+    showPlanetsLabels: true,
+    showSunMoon: true,
+    showConstellations: true,
+    showConstellationBoundaries: true,
+    showConstellationLabels: true,
+    showAzGrid: true,
+    showGalaxy: true
   }
 
   render() {

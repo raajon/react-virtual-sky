@@ -2,7 +2,7 @@ import {radec2xy} from './projections.js'
 
 const d2r = Math.PI/180;
 
-export const getStars = (stereo, azOff, config) =>{
+export const getStars = (stereo, azOff, config, starMag) =>{
   let stars = []
   starsConstellationDefinitions.concat(starsDefinition).forEach((s, i) => {
     let star = {
@@ -14,7 +14,8 @@ export const getStars = (stereo, azOff, config) =>{
     star = {...star , ...radec2xy(star.ra, star.dec, stereo, azOff, config)};
     stars.push(star);
   });
-  return stars.filter(s=>(s.x>0 && s.y>0 && s.x<=config.width && s.y<=config.height));
+  console.log(config)
+  return stars.filter(s=>(s.x>0 && s.y>0 && s.x<=config.width && s.y<=config.height && s.mag<=starMag));
 }
 
 export const drawStars = (svg, stars) =>{
