@@ -2,7 +2,7 @@ import {radec2xy} from './projections.js'
 
 const d2r = Math.PI/180;
 
-export const getStars = (stereo, azOff, config, starMag) =>{
+export const getStars = (starMag) =>{
   let stars = []
   starsConstellationDefinitions.concat(starsDefinition).forEach((s, i) => {
     let star = {
@@ -11,20 +11,42 @@ export const getStars = (stereo, azOff, config, starMag) =>{
       ra: s[2] * d2r,
       dec: s[3] * d2r
     }
-    star = {...star , ...radec2xy(star.ra, star.dec, stereo, azOff, config)};
+    // star = {...star , ...radec2xy(star.ra, star.dec, stereo, azOff, config)};
     stars.push(star);
   });
-  console.log(config)
-  return stars.filter(s=>(s.x>0 && s.y>0 && s.x<=config.width && s.y<=config.height && s.mag<=starMag));
+  // console.log(stars.filter(s=>(s.mag<=starMag)))
+  // return stars.filter(s=>(s.x>0 && s.y>0 && s.x<=config.width && s.y<=config.height && s.mag<=starMag));
+  return stars.filter(s=>(s.mag<=starMag));
 }
 
-export const drawStars = (svg, stars) =>{
-  svg.selectAll("rect").data(stars).enter().append("svg:circle")
+export const drawStars = (svg, stars, projection, azOff, config) =>{
+  stars.forEach((star, i) => {
+    const pos = radec2xy(star.ra, star.dec, projection, azOff, config);
+    star.x = pos.x;
+    star.y = pos.y;
+    star.az = pos.az;
+    star.el = pos.el;
+  });
+
+  const ss = stars.filter(s=>(isVisible(s.el) && !isNaN(s.x) && !isPointBad(s)));
+
+  const circles = svg.selectAll('circle');
+  const databoundCircles = circles.data(ss);
+  databoundCircles.enter().append('circle');;
+  databoundCircles.exit().remove();
+  databoundCircles
       .attr("cx", (d) =>{ return d.x; })
       .attr("cy", (d) =>{ return d.y; })
       .attr("r", (d) =>{ return d.mag ? (9-d.mag)/3 : 0; })
       .style("fill", (d) =>{ return "white"; });
 }
+
+const isVisible = (el) =>{
+	return el > 0;
+};
+const isPointBad = (p) =>{
+	return p.x===-1 && p.y===-1;
+};
 
 export const starsConstellationDefinitions = [[677,2.1,2.097,29.09],[746,2.3,2.295,59.15],[765,3.9,2.353,-45.75],
 					[1067,2.8,3.309,15.18],[1562,3.6,4.857,-8.82],[1599,4.2,5.018,-64.87],[1645,5.4,5.149,8.19],

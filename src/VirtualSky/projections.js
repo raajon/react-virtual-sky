@@ -114,7 +114,7 @@ export const stereo = {
 		var el = Math.asin(Math.cos(c)*sinel1 + Y * Math.sin(c) * cosel1 / P);
 		var az = Math.PI + Math.atan2(X * Math.sin(c), P * cosel1 * Math.cos(c) - Y * sinel1 * Math.sin(c));
 
-		return [az, el];
+		return {az:az, el:el};
 	}
 }
 
