@@ -6,12 +6,13 @@ const d2r = Math.PI/180;
 const r2d = 180.0/Math.PI;
 const AUinkm = 149597870.700;
 
+let planets = [];
 
-export const getPlanets = (projection, azOff, config) =>{
-  const planets = [];
+export const calcPlanets = (projection, azOff, config) =>{
 	const days = 365.25;
   const jd = config.astronomicalTimes.JD;
 	const planetsBuilded = build(Math.floor(jd)-days*0.25,days*1.25);
+  planets = [];
 
   planetsBuilded.forEach((p, i) => {
     if(p[2].length%4 === 0){
@@ -40,36 +41,46 @@ export const getPlanets = (projection, azOff, config) =>{
       }
     }
   });
-  return planets;
 }
 
-export const drawPlanets = (svg, planets) =>{
-  svg.selectAll("rect").data(planets).enter().append("svg:circle")
+export const drawPlanets = (svg) =>{
+  const pp = planets.filter(s=>(isVisible(s.el) && !isNaN(s.x) && !isPointBad(s)));
+
+  const circles = svg.selectAll('.planet');
+  const databoundCircles = circles.data(pp);
+  databoundCircles.enter().append('circle').attr('class','planet');;
+  databoundCircles.exit().remove();
+  databoundCircles
       .attr("cx", (d) =>{ return d.x; })
       .attr("cy", (d) =>{ return d.y; })
       .attr("r", (d) =>{ return d.mag ? (9-d.mag)/3 : 0; })
       .style("fill", (d) =>{ return d.color; });
 }
 
-export const drawPlanetOrbits = (svg, planets) =>{
-  var lineFunction = d3.svg.line()
-    .x(d =>{ return d.x; })
-    .y(d =>{ return d.y; })
-    .interpolate("linear");
+export const drawPlanetOrbits = (svg) =>{
   planets.forEach((planet, i) => {
-    planet.orbit.forEach((part, j) => {
-      svg.append("path")
-          .attr("d", lineFunction(part))
-          .attr("stroke", planet.color)
-          .attr("stroke-width", 1)
-          .attr("fill", "none");
-    });
+    planet.orbit = planet.orbit.filter(o=>o.length>0);
+  });
+
+  planets.forEach((planet, i) => {
+    const orbits = svg.selectAll('.planetOrbit' + planet.name);
+    const databoundOrbits = orbits.data(planet.orbit);
+    databoundOrbits.enter().append('path').attr('class','planetOrbit' + planet.name);;
+    databoundOrbits.exit().remove();
+    databoundOrbits
+        .attr("d", (d)=>lineFunction(d))
+        .attr("stroke", planet.color)
+        .attr("stroke-width", 1)
+        .attr("fill", "none");
   });
 }
 
-export const drawPlanetLabels = (svg, planets) =>{
-console.log(planets)
-    svg.selectAll("rect").data(planets).enter().append("svg:text")
+export const drawPlanetLabels = (svg) =>{
+    const labels = svg.selectAll('.planetLabels');
+    const databoundLabels = labels.data(planets);
+    databoundLabels.enter().append('text').attr('class','planetLabels');;
+    databoundLabels.exit().remove();
+    databoundLabels
       .attr("x", (d) =>{ return d.x; })
       .attr("y", (d) =>{ return d.y; })
       .attr("dx", (d) =>{ return 5; })
@@ -79,6 +90,18 @@ console.log(planets)
       .text( (d) =>{ return d.name; });
 }
 
+
+const lineFunction = d3.svg.line()
+  .x(d =>{ return d.x; })
+  .y(d =>{ return d.y; })
+  .interpolate("linear");
+
+const isVisible = (el) =>{
+	return el > 0;
+};
+const isPointBad = (p) =>{
+	return p.x===-1 && p.y===-1;
+};
 
 const planetsDefinitions2 = [{
 	"name": "Me",

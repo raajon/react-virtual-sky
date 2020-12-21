@@ -66,26 +66,40 @@ export const getBoundaries = (projection, azOff, config) =>{
   return boundaries;
 }
 
+
+export const drawBoundaries = (svg, projection, azOff, config) =>{
+  const boundaries = getBoundaries(projection, azOff, config);
+
+  const lines = svg.selectAll('.constellationBoundaries');
+  const databoundBoundaries = lines.data(boundaries);
+  databoundBoundaries.enter().append('path').attr('class','constellationBoundaries');;
+  databoundBoundaries.exit().remove();
+  databoundBoundaries
+      .attr("d", d=>lineFunction([d.posa, d.posb]))
+      .attr("stroke", "#ff84")
+      .attr("stroke-width", 1)
+      .attr("fill", "none");
+
+  // lines.forEach((line, i) => {
+  //     svg.append("path")
+  //         .attr("d", lineFunction([line.posa, line.posb]))
+  //         .attr("stroke", "#ff84")
+  //         .attr("stroke-width", 1)
+  //         .attr("fill", "none");
+  //  });
+}
+
+const lineFunction = d3.svg.line()
+     .x(d =>{ return d.x; })
+     .y(d =>{ return d.y; })
+     .interpolate("linear");
+
 const isVisible = (p, config) =>{
   return p.x>=0 && p.y>=0 && p.x<=config.width && p.y<=config.height;
 };
 const isPointBad = (p) =>{
 	return typeof p !== "object";
 };
-
-export const drawBoundaries = (svg, lines) =>{
-  var lineFunction = d3.svg.line()
-       .x(d =>{ return d.x; })
-       .y(d =>{ return d.y; })
-       .interpolate("linear");
-  lines.forEach((line, i) => {
-      svg.append("path")
-          .attr("d", lineFunction([line.posa, line.posb]))
-          .attr("stroke", "#ff84")
-          .attr("stroke-width", 1)
-          .attr("fill", "none");
-   });
-}
 
 const boundariesDefinition = [
 ["And",343,34.5,343,52.5,350,52.5,350,50,353.75,50,353.75,48,2.5,48,2.5,46,13,46,13,48,16.75,48,16.75,50,20.5,50,25,50,25,47,30.625,47,30.625,50.5,37.75,50.5,37.75,36.75,30,36.75,30,35,21.125,35,21.125,33,10.75,33,10.75,23.75,12.75,23.75,12.75,21,2.125,21,2.125,22,1,22,1,28,0,28,0,31.33333,356.25,31.33333,356.25,32.08333,352.5,32.08333,352.5,34.5,343,34.5],

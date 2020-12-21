@@ -6,13 +6,14 @@ import {getConstellationLabels, drawConstellationLabels} from './constellationLa
 import {getBoundaries, drawBoundaries} from './constllationBoundaries.js';
 import {getGalaxy, drawGalaxy} from './galaxy.js';
 import {getGrids, drawGrids} from './grids.js';
-import {getStars, drawStars} from './stars.js';
-import {getMoonAndSun, drawMoonAndSun} from './sunAndMoon.js';
-import {getPlanets, drawPlanets, drawPlanetOrbits, drawPlanetLabels} from './planets.js';
+import {drawStars} from './stars.js';
+import {drawMoonAndSun} from './sunAndMoon.js';
+import {calcPlanets, drawPlanets, drawPlanetOrbits, drawPlanetLabels} from './planets.js';
 import {stereo} from './projections.js'
 
 let  clickAz = null;
 let stars = [];
+let planets = [];
 let svg = null;
 let azOff = 0;
 
@@ -41,14 +42,14 @@ console.log("useEffect");
     svg = drawCanvas();
     const galaxy = visibility.showGalaxy ? getGalaxy(stereo, azOff, config) : null;
     const gridAz = visibility.showAzGrid ? getGrids(stereo, azOff, config) : null;
-    const constellationLines = visibility.showConstellations ? getConstellationLines(stereo, azOff, config) : null;
+    // const constellationLines = visibility.showConstellations ? getConstellationLines(stereo, azOff, config) : null;
     const constellationLabels = visibility.showConstellationLabels ? getConstellationLabels(stereo, azOff, config) : null;
     const constellationBoundaries = visibility.showConstellationBoundaries ? getBoundaries(stereo, azOff, config) : null;
-    stars = getStars(starMag)
-    const planets = visibility.showPlanets || visibility.showPlanetsOrbit ? getPlanets(stereo, azOff, config) : null;
-    const moonAndSun = visibility.showSunMoon ? getMoonAndSun(stereo, azOff, config) : null;
+    // stars = getStars(starMag)
+    // planets = visibility.showPlanets || visibility.showPlanetsOrbit ? getPlanets(stereo, azOff, config) : null;
+    // const moonAndSun = visibility.showSunMoon ? getMoonAndSun(stereo, azOff, config) : null;
     // draw(visibility, galaxy, constellationLines, constellationLabels, constellationBoundaries, gridAz, planets, moonAndSun);
-    draw2(svg, azOff, stars);
+    draw(svg, azOff, stars);
 
   });
 
@@ -71,8 +72,25 @@ console.log("useEffect");
 //     }
 //   }
 
-  const draw2 = (svg, azOff, stars) =>{
-      if(stars){drawStars(svg, stars, stereo, azOff, config); }
+  const draw = (svg, azOff, stars) =>{
+const start = new Date().getTime();
+      drawStars(svg, stereo, azOff, config, starMag);
+      if(visibility.showPlanets || visibility.showPlanetsLabels || visibility.showPlanetsOrbit){
+        calcPlanets(stereo, azOff, config);
+        if(visibility.showPlanets) drawPlanets(svg);
+        if(visibility.showPlanetsLabels) drawPlanetLabels(svg);
+        if(visibility.showPlanetsOrbit) drawPlanetOrbits(svg);
+      }
+      if(visibility.showSunMoon){
+        drawMoonAndSun(svg, stereo, azOff, config);
+      }
+      if(visibility.showConstellations){
+        drawConstellationLines(svg, stereo, azOff, config);
+      }
+      if(visibility.showConstellationBoundaries){
+        drawBoundaries(svg, stereo, azOff, config);
+      }
+console.log(new Date().getTime() - start + "ms");
   }
 
   const drawCanvas = () =>{
@@ -89,14 +107,14 @@ console.log("useEffect");
          if(clickAz){
            const pos = stereo.xy2azel(...d3.mouse(svg.node()), config.width, config.height);
            const newAzOff = azOff + (clickAz - pos.az )*r2d;
-           draw2(svg, newAzOff, stars)
+           draw(svg, newAzOff, stars, planets)
          }
        })
        .on('mouseup',(d) =>{
          const pos = stereo.xy2azel(...d3.mouse(svg.node()), config.width, config.height);
-         const newAzOff = azOff + (clickAz - pos.az )*r2d;
+         azOff = azOff + (clickAz - pos.az )*r2d;
          clickAz = null;
-         draw2(svg, newAzOff, stars)
+         draw(svg, azOff, stars, planets)
        })
    return svg;
   }

@@ -45,19 +45,25 @@ export const getConstellationLines = (projection, azOff, config) =>{
   return lines;
 }
 
-export const drawConstellationLines = (svg, lines) =>{
-  var lineFunction = d3.svg.line()
-       .x(d =>{ return d.x; })
-       .y(d =>{ return d.y; })
-       .interpolate("linear");
-  lines.forEach((line, i) => {
-      svg.append("path")
-          .attr("d", lineFunction([line.posa, line.posb]))
-          .attr("stroke", "#fff4")
-          .attr("stroke-width", 2)
-          .attr("fill", "none");
-   });
+export const drawConstellationLines = (svg, projection, azOff, config) =>{
+  const constelations = getConstellationLines(projection, azOff, config);
+
+  const lines = svg.selectAll('.constellationLines');
+  const databoundLines = lines.data(constelations);
+  databoundLines.enter().append('path').attr('class','constellationLines');;
+  databoundLines.exit().remove();
+  databoundLines
+      .attr("d", d=>lineFunction([d.posa, d.posb]))
+      .attr("stroke", "#fff4")
+      .attr("stroke-width", 2)
+      .attr("fill", "none");
 }
+
+
+const lineFunction = d3.svg.line()
+     .x(d =>{ return d.x; })
+     .y(d =>{ return d.y; })
+     .interpolate("linear");
 
 const isVisible = (p, config) =>{
   return p.x>=0 && p.y>=0 && p.x<=config.width && p.y<=config.height;

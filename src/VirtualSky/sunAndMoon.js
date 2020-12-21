@@ -2,12 +2,17 @@ import {ecliptic2xy} from './projections.js';
 
 const d2r = Math.PI/180;
 
-export const drawMoonAndSun = (svg, moon, sun) =>{
-    svg.selectAll("rect").data([moon,sun]).enter().append("svg:circle")
-        .attr("cx", (d) =>{ return d.x; })
-        .attr("cy", (d) =>{ return d.y; })
-        .attr("r", (d) =>{ return d.r; })
-        .style("fill", (d) =>{ return d.colour; });
+export const drawMoonAndSun = (svg, projection, azOff, config) =>{
+    const {sun, moon} = getMoonAndSun(projection, azOff, config)
+    const circles = svg.selectAll('.moonsun');
+    const databoundCircles = circles.data([moon,sun]);
+    databoundCircles.enter().append('circle').attr('class','moonsun');
+    databoundCircles.exit().remove();
+    databoundCircles
+      .attr("cx", (d) =>{ return d.x; })
+      .attr("cy", (d) =>{ return d.y; })
+      .attr("r", (d) =>{ return d.r; })
+      .style("fill", (d) =>{ return d.colour; });
 }
 
 
