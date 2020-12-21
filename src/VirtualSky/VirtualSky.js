@@ -9,6 +9,7 @@ import {calcGrids, drawGridAz} from './grids.js';
 import {drawStars} from './stars.js';
 import {drawMoonAndSun} from './sunAndMoon.js';
 import {calcPlanets, drawPlanets, drawPlanetOrbits, drawPlanetLabels} from './planets.js';
+import {drawInfo} from './info.js';
 import {stereo} from './projections.js'
 
 let  clickAz = null;
@@ -41,7 +42,7 @@ const VirtualSky = (props) => {
   });
 
   const draw = (svg, azOff, stars) =>{
-const start = new Date().getTime();
+      const start = new Date().getTime();
       if(visibility.showGalaxy){
         calcGalaxy(stereo, azOff, config);
         drawGalaxy(svg);
@@ -72,7 +73,8 @@ const start = new Date().getTime();
         calcConstellationLabels(stereo, azOff, config);
         drawConstellationLabels(svg);
       }
-console.log(new Date().getTime() - start + "ms");
+      const rendTime = new Date().getTime() - start + "ms";
+      drawInfo(svg, config, rendTime);
   }
 
   const drawCanvas = () =>{

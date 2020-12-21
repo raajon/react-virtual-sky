@@ -27,7 +27,7 @@ export const drawGalaxy = (svg) =>{
         .attr("d", d=>lineFunction(d))
         .attr("stroke", "#396bad40")
         .attr("stroke-width", 2)
-        // .attr("fill", (d,i) =>i===0?"#396bad20":"#000");
+        .attr("fill", (d,i) =>i===0?"#396bad20":"#000");
 }
 
 const lineFunction = d3.svg.line()

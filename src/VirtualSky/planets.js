@@ -53,7 +53,7 @@ export const drawPlanets = (svg) =>{
   databoundCircles
       .attr("cx", (d) =>{ return d.x; })
       .attr("cy", (d) =>{ return d.y; })
-      .attr("r", (d) =>{ return d.mag ? (9-d.mag)/3 : 0; })
+      .attr("r", (d) =>{ return d.mag ? (9-d.mag) : 0; })
       .style("fill", (d) =>{ return d.color; });
 }
 

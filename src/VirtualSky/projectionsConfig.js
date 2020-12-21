@@ -40,7 +40,7 @@ const astronomicalTimes = (clock,lon) =>{
 	d = d - Math.floor(d);
 	if(d < 0) d += 1;
 	LST = 24.0*d;
-	return { GST:GST, LST:LST, JD:JD };
+	return { GST:GST, LST:LST, JD:JD, clock: clock };
 };
 
 const getJD = (clock) =>{
