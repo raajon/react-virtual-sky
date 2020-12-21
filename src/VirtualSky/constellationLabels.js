@@ -2,12 +2,13 @@ import {constellationDefinition} from './constellationLines.js';
 import {radec2xy} from './projections.js'
 
 const d2r = Math.PI/180;
+let labels = [];
 
-export const getConstellationLabels = (projection, azOff, config) =>{
-  const labels = [];
+export const calcConstellationLabels = (projection, azOff, config) =>{
+  labels = [];
   constellationDefinition.forEach((constel, i) => {
     const pos = radec2xy(constel[1]*d2r, constel[2]*d2r, projection, azOff, config);
-    if(isVisible(pos, config)){
+    if(isVisible(pos.el)){
       if(!isPointBad(pos)){
         labels.push({
           name: constel[0],
@@ -16,11 +17,14 @@ export const getConstellationLabels = (projection, azOff, config) =>{
       }
     }
   });
-  return labels;
 }
 
-export const drawConstellationLabels = (svg, labels) =>{
-      svg.selectAll("rect").data(labels).enter().append("svg:text")
+export const drawConstellationLabels = (svg) =>{
+      const labelsSvg = svg.selectAll('.constellationLabels');
+      const databoundLabels = labelsSvg.data(labels);
+      databoundLabels.enter().append('text').attr('class','constellationLabels');;
+      databoundLabels.exit().remove();
+      databoundLabels
         .attr("x", (d) =>{ return d.x; })
         .attr("y", (d) =>{ return d.y; })
         .attr("fill", "#fee")
@@ -29,8 +33,8 @@ export const drawConstellationLabels = (svg, labels) =>{
         .text( (d) =>{ return d.name; });
 }
 
-const isVisible = (p, config) =>{
-  return p.x>=0 && p.y>=0 && p.x<=config.width && p.y<=config.height;
+const isVisible = (el) =>{
+  return el>0;
 };
 const isPointBad = (p) =>{
 	return typeof p !== "object";

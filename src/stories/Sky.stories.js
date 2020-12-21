@@ -56,16 +56,16 @@ Primary.args = {
   latitude: 51.7462699,
   longitude: 19.5051337,
   time: new Date(),
-  starMag:1,
+  starMag:7,
   showPlanets: true,
   showPlanetsOrbit: true,
-  showPlanetsLabels: false,
+  showPlanetsLabels: true,
   showSunMoon: true,
   showConstellations: true,
   showConstellationBoundaries: false,
-  showConstellationLabels: false,
-  showAzGrid: false,
-  showGalaxy: false
+  showConstellationLabels: true,
+  showAzGrid: true,
+  showGalaxy: true
 };
 
 export const VirtualSkyExample = Template.bind({});

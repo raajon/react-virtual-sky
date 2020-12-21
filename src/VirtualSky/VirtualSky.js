@@ -1,11 +1,11 @@
 import React, {useState, useEffect, useRef, useLayoutEffect} from 'react';
 import d3 from 'd3'
 import projectionsConfig from '../VirtualSky/projectionsConfig.js';
-import {getConstellationLines, drawConstellationLines} from './constellationLines.js';
-import {getConstellationLabels, drawConstellationLabels} from './constellationLabels.js';
-import {getBoundaries, drawBoundaries} from './constllationBoundaries.js';
-import {getGalaxy, drawGalaxy} from './galaxy.js';
-import {getGrids, drawGrids} from './grids.js';
+import {calcConstellationLines, drawConstellationLines} from './constellationLines.js';
+import {calcConstellationLabels, drawConstellationLabels} from './constellationLabels.js';
+import {calcBoundaries, drawBoundaries} from './constllationBoundaries.js';
+import {calcGalaxy, drawGalaxy} from './galaxy.js';
+import {calcGrids, drawGridAz} from './grids.js';
 import {drawStars} from './stars.js';
 import {drawMoonAndSun} from './sunAndMoon.js';
 import {calcPlanets, drawPlanets, drawPlanetOrbits, drawPlanetLabels} from './planets.js';
@@ -36,44 +36,28 @@ const VirtualSky = (props) => {
   }, [config]);
 
   useEffect(() => {
-    //   showPlanetsLabels: args.showPlanetsLabels,
-    //   showConstellationLabels: args.showConstellationLabels,
-console.log("useEffect");
     svg = drawCanvas();
-    const galaxy = visibility.showGalaxy ? getGalaxy(stereo, azOff, config) : null;
-    const gridAz = visibility.showAzGrid ? getGrids(stereo, azOff, config) : null;
-    // const constellationLines = visibility.showConstellations ? getConstellationLines(stereo, azOff, config) : null;
-    const constellationLabels = visibility.showConstellationLabels ? getConstellationLabels(stereo, azOff, config) : null;
-    const constellationBoundaries = visibility.showConstellationBoundaries ? getBoundaries(stereo, azOff, config) : null;
-    // stars = getStars(starMag)
-    // planets = visibility.showPlanets || visibility.showPlanetsOrbit ? getPlanets(stereo, azOff, config) : null;
-    // const moonAndSun = visibility.showSunMoon ? getMoonAndSun(stereo, azOff, config) : null;
-    // draw(visibility, galaxy, constellationLines, constellationLabels, constellationBoundaries, gridAz, planets, moonAndSun);
     draw(svg, azOff, stars);
-
   });
-
-//   const draw = (visibility, galaxy, constellationLines, constellationLabels, constellationBoundaries, gridAz, planets, moonAndSun) =>{
-//     const svg = drawCanvas();
-// console.log("draw");
-//     if(galaxy){ drawGalaxy(svg, galaxy); }
-//     if(gridAz){ drawGrids(svg, gridAz); }
-//     if(constellationLines){ drawConstellationLines(svg, constellationLines); }
-//     if(constellationLabels){ drawConstellationLabels(svg, constellationLabels); }
-//     if(constellationBoundaries){ drawBoundaries(svg, constellationBoundaries); }
-//     if(stars){ drawStars(svg, stars, stereo, azOff, config); }
-//     if(planets){
-//       if(visibility.showPlanets) drawPlanets(svg, planets);
-//       if(visibility.showPlanetsLabels) drawPlanetLabels(svg, planets);
-//       if(visibility.showPlanetsOrbit) drawPlanetOrbits(svg, planets);
-//     }
-//     if(moonAndSun){
-//       drawMoonAndSun(svg, moonAndSun.moon, moonAndSun.sun);
-//     }
-//   }
 
   const draw = (svg, azOff, stars) =>{
 const start = new Date().getTime();
+      if(visibility.showGalaxy){
+        calcGalaxy(stereo, azOff, config);
+        drawGalaxy(svg);
+      }
+      if(visibility.showAzGrid){
+        calcGrids(stereo, azOff, config);
+        drawGridAz(svg);
+      }
+      if(visibility.showConstellations){
+        calcConstellationLines(stereo, azOff, config);
+        drawConstellationLines(svg, config);
+      }
+      if(visibility.showConstellationBoundaries){
+        calcBoundaries(stereo, azOff, config);
+        drawBoundaries(svg, config);
+      }
       drawStars(svg, stereo, azOff, config, starMag);
       if(visibility.showPlanets || visibility.showPlanetsLabels || visibility.showPlanetsOrbit){
         calcPlanets(stereo, azOff, config);
@@ -84,11 +68,9 @@ const start = new Date().getTime();
       if(visibility.showSunMoon){
         drawMoonAndSun(svg, stereo, azOff, config);
       }
-      if(visibility.showConstellations){
-        drawConstellationLines(svg, stereo, azOff, config);
-      }
-      if(visibility.showConstellationBoundaries){
-        drawBoundaries(svg, stereo, azOff, config);
+      if(visibility.showConstellationLabels){
+        calcConstellationLabels(stereo, azOff, config);
+        drawConstellationLabels(svg);
       }
 console.log(new Date().getTime() - start + "ms");
   }

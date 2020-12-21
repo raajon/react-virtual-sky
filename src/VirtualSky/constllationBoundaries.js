@@ -3,8 +3,10 @@ import d3 from 'd3'
 
 const d2r = Math.PI/180;
 
-export const getBoundaries = (projection, azOff, config) =>{
-  const boundaries=[]
+let boundaries= [];
+
+export const calcBoundaries = (projection, azOff, config) =>{
+  boundaries=[]
 	var posa,posb,a,b,l,d,atob,btoa,move,j,ra,dc,dra,ddc,points;
 	atob = "";
 	btoa = "";
@@ -55,7 +57,7 @@ export const getBoundaries = (projection, azOff, config) =>{
 				for(let i = 0; i <= points.length; i++){
 					j = (i === points.length) ? 0 : i;
           posb = radec2xy(points[j].x, points[j].y, projection, azOff, config);
-					if(posa && (isVisible(posa, config) || isVisible(posb, config)) && points[j].move){
+					if(posa && (isVisible(posa.el) || isVisible(posb.el)) && points[j].move){
 						if(!isPointBad(posa) && !isPointBad(posb)){
 		    			boundaries.push({posa, posb});
 						}
@@ -63,15 +65,14 @@ export const getBoundaries = (projection, azOff, config) =>{
 					posa = posb;
 				}
   });
-  return boundaries;
 }
 
 
-export const drawBoundaries = (svg, projection, azOff, config) =>{
-  const boundaries = getBoundaries(projection, azOff, config);
+export const drawBoundaries = (svg, config) =>{
+  const bb = boundaries.filter(b=>isVisible2(b.posa, config) && isVisible2(b.posb, config));
 
   const lines = svg.selectAll('.constellationBoundaries');
-  const databoundBoundaries = lines.data(boundaries);
+  const databoundBoundaries = lines.data(bb);
   databoundBoundaries.enter().append('path').attr('class','constellationBoundaries');;
   databoundBoundaries.exit().remove();
   databoundBoundaries
@@ -79,14 +80,6 @@ export const drawBoundaries = (svg, projection, azOff, config) =>{
       .attr("stroke", "#ff84")
       .attr("stroke-width", 1)
       .attr("fill", "none");
-
-  // lines.forEach((line, i) => {
-  //     svg.append("path")
-  //         .attr("d", lineFunction([line.posa, line.posb]))
-  //         .attr("stroke", "#ff84")
-  //         .attr("stroke-width", 1)
-  //         .attr("fill", "none");
-  //  });
 }
 
 const lineFunction = d3.svg.line()
@@ -94,8 +87,11 @@ const lineFunction = d3.svg.line()
      .y(d =>{ return d.y; })
      .interpolate("linear");
 
-const isVisible = (p, config) =>{
-  return p.x>=0 && p.y>=0 && p.x<=config.width && p.y<=config.height;
+const isVisible = (el) =>{
+  return el>=0;
+};
+const isVisible2 = (b, config) =>{
+  return b.x>-100 && b.x<config.width+100 && b.y>-100 & b.y<config.height+100;
 };
 const isPointBad = (p) =>{
 	return typeof p !== "object";

@@ -4,7 +4,9 @@ import d3 from 'd3'
 
 const d2r = Math.PI/180;
 
-export const getConstellationLines = (projection, azOff, config) =>{
+let constelations = [];
+
+export const calcConstellationLines = (projection, azOff, config) =>{
   const hipparcos = [];
   const lines = [];
   for(let c = 0; c < constellationDefinition.length; c++){
@@ -34,7 +36,7 @@ export const getConstellationLines = (projection, azOff, config) =>{
         if(a >= 0 && b >= 0 && a < starsConstellationDefinitions.length && b < starsConstellationDefinitions.length){
           const posa = radec2xy(starsConstellationDefinitions[a][2]*d2r, starsConstellationDefinitions[a][3]*d2r, projection, azOff, config);
           const posb = radec2xy(starsConstellationDefinitions[b][2]*d2r, starsConstellationDefinitions[b][3]*d2r, projection, azOff, config);
-          if(isVisible(posa, config) && isVisible(posb, config)){
+          if(isVisible(posa.el) && isVisible(posb.el)){
             if(!isPointBad(posa) && !isPointBad(posb)){
               lines.push({posa, posb});
             }
@@ -42,14 +44,14 @@ export const getConstellationLines = (projection, azOff, config) =>{
         }
       }
   }
-  return lines;
+  constelations = lines;
 }
 
-export const drawConstellationLines = (svg, projection, azOff, config) =>{
-  const constelations = getConstellationLines(projection, azOff, config);
+export const drawConstellationLines = (svg, config) =>{
+  const cc = constelations.filter(b=>isVisible2(b.posa, config) && isVisible2(b.posb, config));
 
   const lines = svg.selectAll('.constellationLines');
-  const databoundLines = lines.data(constelations);
+  const databoundLines = lines.data(cc);
   databoundLines.enter().append('path').attr('class','constellationLines');;
   databoundLines.exit().remove();
   databoundLines
@@ -65,8 +67,11 @@ const lineFunction = d3.svg.line()
      .y(d =>{ return d.y; })
      .interpolate("linear");
 
-const isVisible = (p, config) =>{
-  return p.x>=0 && p.y>=0 && p.x<=config.width && p.y<=config.height;
+const isVisible = (el) =>{
+	return el > 0;
+};
+const isVisible2 = (b, config) =>{
+  return b.x>-100 && b.x<config.width+100 && b.y>-100 & b.y<config.height+100;
 };
 const isPointBad = (p) =>{
 	return typeof p !== "object";
