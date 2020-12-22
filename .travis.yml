@@ -3,3 +3,13 @@ node_js:
   - '10.19.0'
 notifications:
   email: true
+before_deploy:
+  npm run build
+deploy:
+  provider: npm
+  email: "$NPM_EMAIL"
+  api-key: "$NPM_API_TOKEN"
+  skip-cleanup: true
+  on:
+    branch:
+      master
