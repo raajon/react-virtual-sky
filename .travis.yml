@@ -4,9 +4,9 @@ node_js:
 notifications:
   email: true
 before_deploy:
-  npm run build
+  yarn run build
 deploy:
-  provider: npm
+  provider: yarn
   email: "$NPM_EMAIL"
   api-key: "$NPM_API_TOKEN"
   skip-cleanup: true
