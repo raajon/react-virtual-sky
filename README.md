@@ -7,7 +7,7 @@
 Its react version of [VirtualSky](https://github.com/slowe/VirtualSky).
 
 #### Basic Demo
-[![Edit react-trello-example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/1o3zj95m9j)
+[![Edit react-trello-example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/react-virtual-sky-fbteb)
 
 ## Getting Started
 
@@ -35,16 +35,18 @@ export default class App extends React.Component {
     latitude: 51.746449,
     longitude: 19.620693,
     time: new Date(),
-    starMag: 6,
-    showPlanets: true,
-    showPlanetsOrbit: true,
-    showPlanetsLabels: true,
-    showSunMoon: true,
-    showConstellations: true,
-    showConstellationBoundaries: true,
-    showConstellationLabels: true,
-    showAzGrid: true,
-    showGalaxy: true
+    visibility:{
+      starMag: 6,
+      showPlanets: true,
+      showPlanetsOrbit: true,
+      showPlanetsLabels: true,
+      showSunMoon: true,
+      showConstellations: true,
+      showConstellationBoundaries: true,
+      showConstellationLabels: true,
+      showAzGrid: true,
+      showGalaxy: true
+    }
   }
 
   render() {
