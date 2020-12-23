@@ -1,6 +1,7 @@
 # React VirtualSky
 
 [![Build Status](https://travis-ci.org/raajon/react-virtual-sky.svg?branch=master)](https://travis-ci.org/raajon/react-virtual-sky)
+[![npm version](https://badge.fury.io/js/react-virtual-sky.svg)](https://badge.fury.io/js/react-virtual-sky)
 
 
 Its react version of [VirtualSky](https://github.com/slowe/VirtualSky).
