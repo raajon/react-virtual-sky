@@ -11,7 +11,7 @@ Its react version of [VirtualSky](https://github.com/slowe/VirtualSky).
 
 ## Getting Started
 
-Install using npm or yarn
+Install using npm or npm
 
 ```bash
 $ npm install --save react-virtual-sky
@@ -20,7 +20,7 @@ $ npm install --save react-virtual-sky
 or
 
 ```bash
-$ yarn add react-virtual-sky
+$ npm add react-virtual-sky
 ```
 
 ## Usage
@@ -58,21 +58,21 @@ export default class App extends React.Component {
 ## Development
 
 ```
-yarn install
-yarn run storybook
+npm install
+npm run storybook
 ```
 
 ### Scripts
 
-1.  `yarn run lint` : Lint all js files
-2.  `yarn run lintfix` : fix linting errors of all js files
-3.  `yarn run semantic-release` : make a release. Leave it for CI to do.
-4.  `yarn run storybook`: Start developing by using storybook
-5.  `yarn run test` : Run tests. tests file should be written as `*.test.js` and using ES2015
-6.  `yarn run test:watch` : Watch tests while writing
-7.  `yarn run test:cover` : Show coverage report of your tests
-8.  `yarn run test:report` : Report test coverage to codecov.io. Leave this for CI
-9.  `yarn run build`: transpile all ES6 component files into ES5(commonjs) and put it in `dist` directory
-10. `yarn run docs`: create static build of storybook in `docs` directory that can be used for github pages
+1.  `npm run lint` : Lint all js files
+2.  `npm run lintfix` : fix linting errors of all js files
+3.  `npm run semantic-release` : make a release. Leave it for CI to do.
+4.  `npm run storybook`: Start developing by using storybook
+5.  `npm run test` : Run tests. tests file should be written as `*.test.js` and using ES2015
+6.  `npm run test:watch` : Watch tests while writing
+7.  `npm run test:cover` : Show coverage report of your tests
+8.  `npm run test:report` : Report test coverage to codecov.io. Leave this for CI
+9.  `npm run build`: transpile all ES6 component files into ES5(commonjs) and put it in `dist` directory
+10. `npm run docs`: create static build of storybook in `docs` directory that can be used for github pages
 
 Learn how to write stories [here](https://storybook.js.org/basics/writing-stories/)
