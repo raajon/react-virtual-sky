@@ -83,24 +83,33 @@ const VirtualSky = (props) => {
         .attr("width", config.width)
         .attr("height", config.height)
         .style("background", "black")
-       .on('mousedown', (d) =>{
-         const pos = stereo.xy2azel(...d3.mouse(svg.node()), config.width, config.height);
-         clickAz = pos.az;
-       })
-       .on('mousemove', (d)=>{
-         if(clickAz){
-           const pos = stereo.xy2azel(...d3.mouse(svg.node()), config.width, config.height);
-           const newAzOff = azOff + (clickAz - pos.az )*r2d;
-           draw(svg, newAzOff, stars, planets)
-         }
-       })
-       .on('mouseup',(d) =>{
-         const pos = stereo.xy2azel(...d3.mouse(svg.node()), config.width, config.height);
-         azOff = azOff + (clickAz - pos.az )*r2d;
-         clickAz = null;
-         draw(svg, azOff, stars, planets)
-       })
+       .on('mousedown', onDown)
+       .on('touchstart', onDown)
+       .on('mousemove', onMove)
+       .on('touchmove', onMove)
+       .on('mouseup', onUp)
+       .on('touchend', onUp)
    return svg;
+  }
+
+  const onDown = (d) =>{
+    const pos = stereo.xy2azel(...d3.mouse(svg.node()), config.width, config.height);
+    clickAz = pos.az;
+  }
+
+  const onMove = (d) =>{
+    if(clickAz){
+      const pos = stereo.xy2azel(...d3.mouse(svg.node()), config.width, config.height);
+      const newAzOff = azOff + (clickAz - pos.az )*r2d;
+      draw(svg, newAzOff, stars, planets)
+    }
+  }
+
+  const onUp = (d) =>{
+    const pos = stereo.xy2azel(...d3.mouse(svg.node()), config.width, config.height);
+    azOff = azOff + (clickAz - pos.az )*r2d;
+    clickAz = null;
+    draw(svg, azOff, stars, planets)
   }
 
   return (
