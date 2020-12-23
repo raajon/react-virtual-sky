@@ -6,10 +6,26 @@
 
 Its react version of [VirtualSky](https://github.com/slowe/VirtualSky).
 
+#### Basic Demo
+[![Edit react-trello-example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/1o3zj95m9j)
+
+## Getting Started
+
+Install using npm or yarn
+
+```bash
+$ npm install --save react-virtual-sky
+```
+
+or
+
+```bash
+$ yarn add react-virtual-sky
+```
 
 ## Usage
 
-<!-- ```jsx
+```jsx
 export default class App extends React.Component {
 
   const config={
@@ -35,14 +51,7 @@ export default class App extends React.Component {
     return <VirtualSky id="startmap" config={config}/>
   }
 }
-``` -->
-
-<iframe src="https://codesandbox.io/embed/cranky-firefly-fbteb?fontsize=14&hidenavigation=1&theme=dark"
-     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
-     title="cranky-firefly-fbteb"
-     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
-   ></iframe>
+```
 
 ## Development
 
