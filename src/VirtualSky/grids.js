@@ -23,14 +23,14 @@ export const calcGrids = (stereo, azOff, config) =>{
   }
 }
 
-export const drawGridAz = (svg) =>{
+export const drawGridAz = (svg, color) =>{
     const lines = svg.selectAll('.gridaz');
     const databoundGridAz = lines.data(grid);
     databoundGridAz.enter().append('path').attr('class','gridaz');;
     databoundGridAz.exit().remove();
     databoundGridAz
         .attr("d", d=>lineFunction(d))
-        .attr("stroke", "#44f6")
+        .attr("stroke", color)
         .attr("stroke-width", 1)
         .attr("fill", "none");
 }

@@ -27,7 +27,8 @@ const VirtualSky = (props) => {
   const visibility = props.config.visibility;
   const starMag = visibility.starMag || 2;
   const config = projectionsConfig(props.config.width, props.config.height, props.config.latitude, props.config.longitude, time)
-
+  const skyColors = props.config.skyColors || [ 'rgb(0,0,0)' ];
+  const gridColor = props.config.gridColor;
 
   useLayoutEffect(() => {
     if (targetRef.current) {
@@ -49,7 +50,7 @@ const VirtualSky = (props) => {
       }
       if(visibility.showAzGrid){
         calcGrids(stereo, azOff, config);
-        drawGridAz(svg);
+        drawGridAz(svg, gridColor);
       }
       if(visibility.showConstellations){
         calcConstellationLines(stereo, azOff, config);
@@ -74,7 +75,9 @@ const VirtualSky = (props) => {
         drawConstellationLabels(svg);
       }
       const rendTime = new Date().getTime() - start + "ms";
-      drawInfo(svg, config, rendTime);
+      if(visibility.showInfo){
+        drawInfo(svg, config, rendTime);
+      }
   }
 
   const drawCanvas = () =>{
@@ -89,6 +92,8 @@ const VirtualSky = (props) => {
        .on('touchmove', onMove)
        .on('mouseup', onUp)
        .on('touchend', onUp)
+
+       makeBackground(svg);
    return svg;
   }
 
@@ -110,6 +115,32 @@ const VirtualSky = (props) => {
     azOff = azOff + (clickAz - pos.az )*r2d;
     clickAz = null;
     draw(svg, azOff, stars, planets)
+  }
+
+  const makeBackground = (svg) =>{
+    const grad = svg.append('defs')
+       .append('linearGradient')
+       .attr('id', 'grad')
+       .attr('x1', '0%')
+       .attr('x2', '0%')
+       .attr('y1', '50%')
+       .attr('y2', '100%');
+
+     grad.selectAll('stop')
+       .data(skyColors)
+       .enter()
+       .append('stop')
+       .style('stop-color', function(d){ return d; })
+       .attr('offset', function(d,i){
+         return 100 * (i / (skyColors.length - 1)) + '%';
+       })
+
+     svg.append('rect')
+       .attr('x', 0)
+       .attr('y', 0)
+       .attr('width', config.width)
+       .attr('height', config.height)
+       .style('fill', 'url(#grad)');
   }
 
   return (

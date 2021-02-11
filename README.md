@@ -35,6 +35,8 @@ export default class App extends React.Component {
     latitude: 51.746449,
     longitude: 19.620693,
     time: new Date(),
+    skyColors: [ "#000", "#100050" ],
+    gridColor: "#100050",
     visibility:{
       starMag: 6,
       showPlanets: true,
@@ -45,7 +47,8 @@ export default class App extends React.Component {
       showConstellationBoundaries: true,
       showConstellationLabels: true,
       showAzGrid: true,
-      showGalaxy: true
+      showGalaxy: true,
+      showInfo: true
     }
   }
 
