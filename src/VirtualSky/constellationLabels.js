@@ -5,13 +5,15 @@ const d2r = Math.PI/180;
 let labels = [];
 
 export const calcConstellationLabels = (projection, azOff, config) =>{
+  const lang = config.language || 'en';
+  const i18n = require('../i18n/' + lang + '.json');
   labels = [];
   constellationDefinition.forEach((constel, i) => {
     const pos = radec2xy(constel[1]*d2r, constel[2]*d2r, projection, azOff, config);
     if(isVisible(pos.el)){
       if(!isPointBad(pos)){
         labels.push({
-          name: constel[0],
+          name: i18n.constellations[constel[0]] || constel[0],
           ...pos
         })
       }

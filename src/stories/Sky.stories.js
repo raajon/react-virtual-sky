@@ -21,9 +21,10 @@ const story = {
     showConstellationLabels: { control: 'boolean' },
     showAzGrid: { control: 'boolean' },
     showGalaxy: { control: 'boolean' },
-    showInfo: { conrtol:'boolean' },
-    skyColors: { control: 'array' },
-    gridColor: { control:'color'}
+    showInfo: { conrtol: 'boolean' },
+    skyColors: { control: {type:'array'} },
+    gridColor: { control:'color' },
+    language: { control:{type: 'select', options: [ 'ar', 'cs', 'de', 'en', 'es', 'fr', 'gl', 'it', 'nl', 'pl', 'pt' ]} },
   },
 };
 
@@ -37,6 +38,7 @@ const Template = (args) =>   {
     time: new Date(args.time),
     skyColors: args.skyColors,
     gridColor: args.gridColor,
+    language: args.language,
     visibility:{
       starMag : args.starMag,
       showPlanets: args.showPlanets,
@@ -74,7 +76,8 @@ Primary.args = {
   showGalaxy: true,
   showInfo: true,
   skyColors: [ "#000", "#100050" ],
-  gridColor: "#100050"
+  gridColor: "#100050",
+  language: 'en'
 };
 
 export const VirtualSkyExample = Template.bind({});
@@ -97,7 +100,8 @@ VirtualSkyExample.args = {
   showGalaxy: true,
   showInfo: true,
   skyColors: [ 'rgb(0,0,0)', 'rgb(20,0,70)' ],
-  gridColor: "#100050"
+  gridColor: "#100050",
+  language: 'en'
 };
 
 export default story;

@@ -9,6 +9,8 @@ const AUinkm = 149597870.700;
 let planets = [];
 
 export const calcPlanets = (projection, azOff, config) =>{
+  const lang = config.language || 'en';
+  const i18n = require('../i18n/' + lang + '.json');
 	const days = 365.25;
   const jd = config.astronomicalTimes.JD;
 	const planetsBuilded = build(Math.floor(jd)-days*0.25,days*1.25);
@@ -19,7 +21,7 @@ export const calcPlanets = (projection, azOff, config) =>{
       if(jd > p[2][0] && jd < p[2][(p[2].length-4)]){
         const interp = interpolate(jd,p[2]);
         const planet = {
-          name: p[0],
+          name: i18n.planets[p[0]] || p[0],
           orbit: [],
           ra: interp.ra,
           dev: interp.dec,

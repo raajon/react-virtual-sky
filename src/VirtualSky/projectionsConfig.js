@@ -1,13 +1,14 @@
 const d2r = Math.PI/180;
 
-const init = (width, height, latitude, longitude, time) =>{
+const init = (width, height, latitude, longitude, language, time) =>{
   const long = setLongitude(longitude);
   return {
     width: width,
     height: height,
     latitude: setLatitude(latitude),
     longitude: long,
-    astronomicalTimes: astronomicalTimes(time, long.deg)
+    astronomicalTimes: astronomicalTimes(time, long.deg),
+    language: language
   }
 }
 

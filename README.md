@@ -37,6 +37,7 @@ export default class App extends React.Component {
     time: new Date(),
     skyColors: [ "#000", "#100050" ],
     gridColor: "#100050",
+    language: 'en',
     visibility:{
       starMag: 6,
       showPlanets: true,
@@ -57,6 +58,19 @@ export default class App extends React.Component {
   }
 }
 ```
+
+## Available languages
+  * ar - العربية
+  * cs - Čeština
+  * de - Deutsch
+  * en - English
+  * es - Español
+  * fr - Français
+  * gl - Galego
+  * it - Italiano
+  * nl - Nederlands
+  * pl - Polski
+  * pt - Português
 
 ## Development
 

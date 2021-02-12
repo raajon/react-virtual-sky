@@ -26,7 +26,7 @@ const VirtualSky = (props) => {
   const time = props.config.time || new Date()
   const visibility = props.config.visibility;
   const starMag = visibility.starMag || 2;
-  const config = projectionsConfig(props.config.width, props.config.height, props.config.latitude, props.config.longitude, time)
+  const config = projectionsConfig(props.config.width, props.config.height, props.config.latitude, props.config.longitude, props.config.language, time)
   const skyColors = props.config.skyColors || [ 'rgb(0,0,0)' ];
   const gridColor = props.config.gridColor;
 
