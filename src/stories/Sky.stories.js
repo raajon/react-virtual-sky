@@ -20,10 +20,14 @@ const story = {
     showConstellationBoundaries: { control: 'boolean' },
     showConstellationLabels: { control: 'boolean' },
     showAzGrid: { control: 'boolean' },
+    showEqGrid: { control: 'boolean' },
+    showGalGrid: { control: 'boolean' },
     showGalaxy: { control: 'boolean' },
     showInfo: { conrtol: 'boolean' },
     skyColors: { control: {type:'array'} },
-    gridColor: { control:'color' },
+    gridAzColor: { control:'color' },
+    gridEqColor: { control:'color' },
+    gridGalColor: { control:'color' },
     language: { control:{type: 'select', options: [ 'ar', 'cs', 'de', 'en', 'es', 'fr', 'gl', 'it', 'nl', 'pl', 'pt' ]} },
   },
 };
@@ -37,7 +41,9 @@ const Template = (args) =>   {
     longitude: args.longitude,
     time: new Date(args.time),
     skyColors: args.skyColors,
-    gridColor: args.gridColor,
+    gridAzColor: args.gridAzColor,
+    gridEqColor: args.gridEqColor,
+    gridGalColor: args.gridGalColor,
     language: args.language,
     visibility:{
       starMag : args.starMag,
@@ -49,6 +55,8 @@ const Template = (args) =>   {
       showConstellationBoundaries: args.showConstellationBoundaries,
       showConstellationLabels: args.showConstellationLabels,
       showAzGrid: args.showAzGrid,
+      showEqGrid: args.showEqGrid,
+      showGalGrid: args.showGalGrid,
       showGalaxy: args.showGalaxy,
       showInfo: args.showInfo
     }
@@ -73,10 +81,14 @@ Primary.args = {
   showConstellationBoundaries: false,
   showConstellationLabels: true,
   showAzGrid: true,
+  showEqGrid: true,
+  showGalGrid: false,
   showGalaxy: true,
   showInfo: true,
   skyColors: [ "#000", "#100050" ],
-  gridColor: "#100050",
+  gridAzColor: "#100050",
+  gridEqColor: "#105000",
+  gridGalColor: "#500020",
   language: 'en'
 };
 
@@ -97,10 +109,14 @@ VirtualSkyExample.args = {
   showConstellationBoundaries: true,
   showConstellationLabels: true,
   showAzGrid: true,
+  showEqGrid: true,
+  showGalGrid: false,
   showGalaxy: true,
   showInfo: true,
   skyColors: [ 'rgb(0,0,0)', 'rgb(20,0,70)' ],
-  gridColor: "#100050",
+  gridAzColor: "#100050",
+  gridEqColor: "#105000",
+  gridGalColor: "#500020",
   language: 'en'
 };
 

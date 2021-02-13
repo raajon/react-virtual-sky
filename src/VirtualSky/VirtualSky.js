@@ -5,7 +5,7 @@ import {calcConstellationLines, drawConstellationLines} from './constellationLin
 import {calcConstellationLabels, drawConstellationLabels} from './constellationLabels.js';
 import {calcBoundaries, drawBoundaries} from './constllationBoundaries.js';
 import {calcGalaxy, drawGalaxy} from './galaxy.js';
-import {calcGrids, drawGridAz} from './grids.js';
+import {calcGridAz, calcGridEq, calcGridGal, drawGridAz, drawGridEq, drawGridGal} from './grids.js';
 import {drawStars} from './stars.js';
 import {drawMoonAndSun} from './sunAndMoon.js';
 import {calcPlanets, drawPlanets, drawPlanetOrbits, drawPlanetLabels} from './planets.js';
@@ -28,7 +28,9 @@ const VirtualSky = (props) => {
   const starMag = visibility.starMag || 2;
   const config = projectionsConfig(props.config.width, props.config.height, props.config.latitude, props.config.longitude, props.config.language, time)
   const skyColors = props.config.skyColors || [ 'rgb(0,0,0)' ];
-  const gridColor = props.config.gridColor;
+  const gridAzColor = props.config.gridAzColor;
+  const gridEqColor = props.config.gridEqColor;
+  const gridGalColor = props.config.gridGalColor;
 
   useLayoutEffect(() => {
     if (targetRef.current) {
@@ -49,8 +51,16 @@ const VirtualSky = (props) => {
         drawGalaxy(svg);
       }
       if(visibility.showAzGrid){
-        calcGrids(stereo, azOff, config);
-        drawGridAz(svg, gridColor);
+        calcGridAz(stereo, azOff, config);
+        drawGridAz(svg, gridAzColor);
+      }
+      if(visibility.showEqGrid){
+        calcGridEq(stereo, azOff, config);
+        drawGridEq(svg, gridEqColor);
+      }
+      if(visibility.showGalGrid){
+        calcGridGal(stereo, azOff, config);
+        drawGridGal(svg, gridGalColor);
       }
       if(visibility.showConstellations){
         calcConstellationLines(stereo, azOff, config);

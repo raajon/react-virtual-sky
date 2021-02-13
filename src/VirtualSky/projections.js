@@ -71,6 +71,20 @@ export const azel2xy = (az,el, projection, az_off, config) =>{
     return {x:pos.x,y:pos.y};
 }
 
+// Convert Galactic -> x,y
+// Inputs: longitude (rad), latitude (rad)
+export const gal2xy = (l,b, projection, az_off, config) =>{
+	const pos = gal2radec(l,b);
+	return radec2xy(pos[0],pos[1], projection, az_off, config);
+};
+
+// Convert Galactic -> J2000
+// Inputs: longitude (rad), latitude (rad)
+const gal2radec = (l,b) =>{
+	// Using SLALIB values
+	return Transform([l,b], [-0.054875539726, 0.494109453312, -0.867666135858, -0.873437108010, -0.444829589425, -0.198076386122, -0.483834985808, 0.746982251810, 0.455983795705],false);
+};
+
 const coord2horizon = (ra, dec, config) =>{
 	var ha, alt, az, sd, sl, cl;
 	// compute hour angle in degrees
