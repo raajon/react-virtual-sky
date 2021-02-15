@@ -17,9 +17,13 @@ let stars = [];
 let planets = [];
 let svg = null;
 let azOff = 0;
+let azOffOff = 0;
 
 const VirtualSky = (props) => {
-  azOff = (props.config.azOff%360)-180;
+  if(azOff != (props.config.azOff%360)-180){
+    azOff = (props.config.azOff%360)-180;
+    azOffOff = 0;
+  }
 
   const r2d = 180.0/Math.PI;
   const targetRef = useRef();
@@ -44,48 +48,49 @@ const VirtualSky = (props) => {
     draw(svg, azOff, stars);
   });
 
-  const draw = (svg, azOff, stars) =>{
+  const draw = (svg, stars) =>{
       const start = new Date().getTime();
+      const azO = azOff + azOffOff;
       if(visibility.showGalaxy){
-        calcGalaxy(stereo, azOff, config);
+        calcGalaxy(stereo, azO, config);
         drawGalaxy(svg);
       }
       if(visibility.showAzGrid){
-        calcGridAz(stereo, azOff, config);
+        calcGridAz(stereo, azO, config);
         drawGridAz(svg, gridAzColor);
       }
       if(visibility.showEqGrid){
-        calcGridEq(stereo, azOff, config);
+        calcGridEq(stereo, azO, config);
         drawGridEq(svg, gridEqColor);
       }
       if(visibility.showGalGrid){
-        calcGridGal(stereo, azOff, config);
+        calcGridGal(stereo, azO, config);
         drawGridGal(svg, gridGalColor);
       }
       if(visibility.showConstellations){
-        calcConstellationLines(stereo, azOff, config);
+        calcConstellationLines(stereo, azO, config);
         drawConstellationLines(svg, config);
       }
       if(visibility.showConstellationBoundaries){
-        calcBoundaries(stereo, azOff, config);
+        calcBoundaries(stereo, azO, config);
         drawBoundaries(svg, config);
       }
-      drawStars(svg, stereo, azOff, config, starMag, visibility.showStarLabels);
+      drawStars(svg, stereo, azO, config, starMag, visibility.showStarLabels);
       if(visibility.showPlanets || visibility.showPlanetsLabels || visibility.showPlanetsOrbit){
-        calcPlanets(stereo, azOff, config);
+        calcPlanets(stereo, azO, config);
         if(visibility.showPlanets) drawPlanets(svg);
         if(visibility.showPlanetsLabels) drawPlanetLabels(svg);
         if(visibility.showPlanetsOrbit) drawPlanetOrbits(svg);
       }
       if(visibility.showSunMoon){
-        drawMoonAndSun(svg, stereo, azOff, config);
+        drawMoonAndSun(svg, stereo, azO, config);
       }
       if(visibility.showConstellationLabels){
-        calcConstellationLabels(stereo, azOff, config);
+        calcConstellationLabels(stereo, azO, config);
         drawConstellationLabels(svg);
       }
       if(visibility.showAzLabels){
-        drawAz(svg, stereo, azOff, config);
+        drawAz(svg, stereo, azO, config);
       }
       const rendTime = new Date().getTime() - start + "ms";
       if(visibility.showInfo){
@@ -118,16 +123,18 @@ const VirtualSky = (props) => {
   const onMove = (d) =>{
     if(clickAz){
       const pos = stereo.xy2azel(...d3.mouse(svg.node()), config.width, config.height);
-      const newAzOff = azOff + (clickAz - pos.az )*r2d;
-      draw(svg, newAzOff, stars, planets)
+      // const newAzOff = azOff + (clickAz - pos.az )*r2d;
+      azOffOff = (clickAz - pos.az )*r2d;
+      draw(svg, stars, planets)
     }
   }
 
   const onUp = (d) =>{
     const pos = stereo.xy2azel(...d3.mouse(svg.node()), config.width, config.height);
-    azOff = azOff + (clickAz - pos.az )*r2d;
+    // azOff = azOff + (clickAz - pos.az )*r2d;
+    azOffOff = (clickAz - pos.az )*r2d;
     clickAz = null;
-    draw(svg, azOff, stars, planets)
+    draw(svg, stars, planets)
   }
 
   const makeBackground = (svg) =>{
