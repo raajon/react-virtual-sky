@@ -20,7 +20,7 @@ let azOff = 0;
 let azOffOff = 0;
 
 const VirtualSky = (props) => {
-  if(azOff != (props.config.azOff%360)-180){
+  if(azOff !== (props.config.azOff%360)-180){
     azOff = (props.config.azOff%360)-180;
     azOffOff = 0;
   }
