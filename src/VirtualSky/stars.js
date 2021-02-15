@@ -2,7 +2,9 @@ import {radec2xy} from './projections.js'
 
 const d2r = Math.PI/180;
 
-export const drawStars = (svg, projection, azOff, config, starMag) =>{
+export const drawStars = (svg, projection, azOff, config, starMag, showStarLabels) =>{
+  const lang = config.language || 'en';
+  const i18n = require('../i18n/' + lang + '.json');
   let ss = stars.filter(s=>(s.mag<=starMag));
   ss.forEach((star, i) => {
     const pos = radec2xy(star.ra, star.dec, projection, azOff, config);
@@ -10,8 +12,9 @@ export const drawStars = (svg, projection, azOff, config, starMag) =>{
     star.y = pos.y;
     star.az = pos.az;
     star.el = pos.el;
+    star.name = i18n.starnames[star.label] || null;
   })
-  ss = ss.filter(s=>(isVisible(s.el) && !isNaN(s.x) && !isPointBad(s)));
+  ss = ss.filter(s=>(isVisible(s.el) && !isNaN(s.x) && !isNaN(s.ra) && !isPointBad(s)));
 
   const circles = svg.selectAll('.star');
   const databoundCircles = circles.data(ss);
@@ -22,7 +25,23 @@ export const drawStars = (svg, projection, azOff, config, starMag) =>{
       .attr("cy", (d) =>{ return d.y; })
       .attr("r", (d) =>{ return d.mag ? (9-d.mag)/3 : 0; })
       .style("fill", (d) =>{ return "white"; });
+
+  if(showStarLabels){
+    const labels = svg.selectAll('.starLabels');
+    const starLabels = labels.data(ss.filter(s=>s.label));
+    starLabels.enter().append('text').attr('class','starLabels');;
+    starLabels.exit().remove();
+    starLabels
+      .attr("x", (d) =>{ return d.x; })
+      .attr("y", (d) =>{ return d.y; })
+      .attr("dx", (d) =>{ return 5; })
+      .attr("fill", (d) =>{ return "#fff"; })
+      .attr("font-size", ".7em")
+      .attr("font-family", "Arial")
+      .text( (d) =>{ return d.name; });
+  }
 }
+
 
 const isVisible = (el) =>{
 	return el > 0;

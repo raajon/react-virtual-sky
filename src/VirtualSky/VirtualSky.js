@@ -70,7 +70,7 @@ const VirtualSky = (props) => {
         calcBoundaries(stereo, azOff, config);
         drawBoundaries(svg, config);
       }
-      drawStars(svg, stereo, azOff, config, starMag);
+      drawStars(svg, stereo, azOff, config, starMag, visibility.showStarLabels);
       if(visibility.showPlanets || visibility.showPlanetsLabels || visibility.showPlanetsOrbit){
         calcPlanets(stereo, azOff, config);
         if(visibility.showPlanets) drawPlanets(svg);
