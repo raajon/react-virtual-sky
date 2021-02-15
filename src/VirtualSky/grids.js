@@ -99,6 +99,28 @@ export const drawGridGal = (svg, color) =>{
         .attr("fill", "none");
 }
 
+export const drawAz = (svg, stereo, azOff, config) =>{
+  const az = [
+    {l:"N", ...azel2xy(0*d2r, 2*d2r, stereo, azOff, config)},
+    {l:"E", ...azel2xy(90*d2r, 2*d2r, stereo, azOff, config)},
+    {l:"S", ...azel2xy(180*d2r, 2*d2r, stereo, azOff, config)},
+    {l:"W", ...azel2xy(270*d2r, 2*d2r, stereo, azOff, config)}
+  ];
+
+  const labels = svg.selectAll('.azLabels');
+  const databoundLabels = labels.data(az);
+  databoundLabels.enter().append('text').attr('class','azLabels');;
+  databoundLabels.exit().remove();
+  databoundLabels
+    .attr("x", (d) =>{ return d.x; })
+    .attr("y", (d) =>{ return d.y; })
+    .attr("dx", (d) =>{ return 5; })
+    .attr("fill", (d) =>{ return '#888'; })
+    .attr("font-size", "1em")
+    .attr("font-family", "Arial")
+    .attr("font-weight", "bold")
+    .text( (d) =>{ return d.l; });
+}
 
 const lineFunction = d3.svg.line()
      .x(d =>{ return d.x; })

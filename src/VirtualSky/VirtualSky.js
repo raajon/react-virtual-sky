@@ -5,7 +5,7 @@ import {calcConstellationLines, drawConstellationLines} from './constellationLin
 import {calcConstellationLabels, drawConstellationLabels} from './constellationLabels.js';
 import {calcBoundaries, drawBoundaries} from './constllationBoundaries.js';
 import {calcGalaxy, drawGalaxy} from './galaxy.js';
-import {calcGridAz, calcGridEq, calcGridGal, drawGridAz, drawGridEq, drawGridGal} from './grids.js';
+import {calcGridAz, calcGridEq, calcGridGal, drawGridAz, drawGridEq, drawGridGal, drawAz} from './grids.js';
 import {drawStars} from './stars.js';
 import {drawMoonAndSun} from './sunAndMoon.js';
 import {calcPlanets, drawPlanets, drawPlanetOrbits, drawPlanetLabels} from './planets.js';
@@ -83,6 +83,9 @@ const VirtualSky = (props) => {
       if(visibility.showConstellationLabels){
         calcConstellationLabels(stereo, azOff, config);
         drawConstellationLabels(svg);
+      }
+      if(visibility.showAzLabels){
+        drawAz(svg, stereo, azOff, config);
       }
       const rendTime = new Date().getTime() - start + "ms";
       if(visibility.showInfo){

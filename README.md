@@ -49,6 +49,7 @@ export default class App extends React.Component {
       showConstellations: true,
       showConstellationBoundaries: true,
       showConstellationLabels: true,
+      showAzLabels: true,
       showAzGrid: true,
       showEqGrid: true,
       showGalGrid: false,
