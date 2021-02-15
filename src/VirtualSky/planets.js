@@ -1,5 +1,6 @@
 import {interpolate} from './projections.js';
 import {radec2xy} from './projections.js';
+import {i18n} from './i18n.js';
 import d3 from 'd3'
 
 const d2r = Math.PI/180;
@@ -10,7 +11,7 @@ let planets = [];
 
 export const calcPlanets = (projection, azOff, config) =>{
   const lang = config.language || 'en';
-  const i18n = require('../i18n/' + lang + '.json');
+  const translates = i18n(lang);
 	const days = 365.25;
   const jd = config.astronomicalTimes.JD;
 	const planetsBuilded = build(Math.floor(jd)-days*0.25,days*1.25);
@@ -21,7 +22,7 @@ export const calcPlanets = (projection, azOff, config) =>{
       if(jd > p[2][0] && jd < p[2][(p[2].length-4)]){
         const interp = interpolate(jd,p[2]);
         const planet = {
-          name: i18n.planets[p[0]] || p[0],
+          name: translates.planets[p[0]] || p[0],
           orbit: [],
           ra: interp.ra,
           dev: interp.dec,

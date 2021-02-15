@@ -1,10 +1,11 @@
 import {radec2xy} from './projections.js'
+import {i18n} from './i18n.js';
 
 const d2r = Math.PI/180;
 
 export const drawStars = (svg, projection, azOff, config, starMag, showStarLabels) =>{
   const lang = config.language || 'en';
-  const i18n = require('../i18n/' + lang + '.json');
+  const translates = i18n(lang);
   let ss = stars.filter(s=>(s.mag<=starMag));
   ss.forEach((star, i) => {
     const pos = radec2xy(star.ra, star.dec, projection, azOff, config);
@@ -12,7 +13,7 @@ export const drawStars = (svg, projection, azOff, config, starMag, showStarLabel
     star.y = pos.y;
     star.az = pos.az;
     star.el = pos.el;
-    star.name = i18n.starnames[star.label] || null;
+    star.name = translates.starnames[star.label] || null;
   })
   ss = ss.filter(s=>(isVisible(s.el) && !isNaN(s.x) && !isNaN(s.ra) && !isPointBad(s)));
 

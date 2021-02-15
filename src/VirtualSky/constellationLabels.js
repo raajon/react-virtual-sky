@@ -1,19 +1,20 @@
 import {constellationDefinition} from './constellationLines.js';
 import {radec2xy} from './projections.js'
+import {i18n} from './i18n.js';
 
 const d2r = Math.PI/180;
 let labels = [];
 
 export const calcConstellationLabels = (projection, azOff, config) =>{
   const lang = config.language || 'en';
-  const i18n = require('../i18n/' + lang + '.json');
+  const translates = i18n(lang);
   labels = [];
   constellationDefinition.forEach((constel, i) => {
     const pos = radec2xy(constel[1]*d2r, constel[2]*d2r, projection, azOff, config);
     if(isVisible(pos.el)){
       if(!isPointBad(pos)){
         labels.push({
-          name: i18n.constellations[constel[0]] || constel[0],
+          name: translates.constellations[constel[0]] || constel[0],
           ...pos
         })
       }
