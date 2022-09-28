@@ -85,7 +85,7 @@ const gal2radec = (l,b) =>{
 	return Transform([l,b], [-0.054875539726, 0.494109453312, -0.867666135858, -0.873437108010, -0.444829589425, -0.198076386122, -0.483834985808, 0.746982251810, 0.455983795705],false);
 };
 
-const coord2horizon = (ra, dec, config) =>{
+export const coord2horizon = (ra, dec, config) =>{
 	var ha, alt, az, sd, sl, cl;
 	// compute hour angle in degrees
 	ha = (Math.PI * config.astronomicalTimes.LST/12) - ra;
