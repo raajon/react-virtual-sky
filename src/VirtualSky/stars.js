@@ -1,5 +1,5 @@
 import {radec2xy} from './projections.js'
-import {i18n} from './i18n.js';
+import {i18n} from '../i18n/i18n.js';
 
 const d2r = Math.PI/180;
 

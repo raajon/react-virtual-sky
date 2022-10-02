@@ -170,5 +170,6 @@
 		"30438":"Canopeia","32349":"Sírio","33579":"Adara","37279":"Prócion","37826":"Pólux","49669":"Régulo","62434":"Mimosa",
 		"65378":"Mizar","65474":"Espiga","68702":"Beta Centauri","69673":"Arcturo","71683":"Alpha Centauri A","80763":"Antares","85927":"Shaula",
 		"91262":"Vega","97649":"Altair","102098":"Deneb","113368":"Fomalhaut"
-	}
+	},
+	"noGPS": "No GPS"
 }

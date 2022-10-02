@@ -1,4 +1,5 @@
-import d3 from 'd3'
+import d3 from 'd3';
+import {i18n} from '../i18n/i18n.js';
 
 export const drawCanvas = (id, size) =>{
   d3.select("#" + id).select("svg").remove();
@@ -23,7 +24,7 @@ export const drawGrid = (svg, size, color) =>{
     const rings = svg.selectAll('.ring');
       rings.data(ringData)
       .enter().append("circle").attr('class','ring')
-      .style("stroke", color)
+      .style("stroke", color || "#F00")
       .attr("r", d=>d.r)
       .attr("cx", d=>d.cx)
       .attr("cy", d=>d.cy);
@@ -48,33 +49,35 @@ export const drawGrid = (svg, size, color) =>{
     databoundGridAz.exit().remove();
     databoundGridAz
         .attr("d", d=>lineFunction(d))
-        .attr("stroke", color)
+        .attr("stroke", color || "#F00")
         .attr("stroke-width", 1)
         .attr("fill", "none");
 }
 
 export const drawMark = (svg, rawValue, size, color) =>{
-  console.log(svg)
   const halfSize = size/2;
   const outerRing = halfSize-10;
   const deg = rawValue * 2*Math.PI / 12;
+
   const data = {
-    cx: (halfSize + (Math.sin(deg) * outerRing)),
-    cy: (halfSize + (-Math.cos(deg) * outerRing)),
+    cx: !isNaN(deg) ? (halfSize + (Math.sin(deg) * outerRing)) : -100,
+    cy: !isNaN(deg) ? (halfSize + (-Math.cos(deg) * outerRing)) : -100,
     r:10
   }
 
   const mark = svg.selectAll('.mark');
     mark.data([data])
     .enter().append("circle").attr('class','mark')
-    .style("stroke", color)
+    .style("stroke", color || "#F00")
     .style("fill", "black")
     .attr("r", d=>d.r)
     .attr("cx", d=>d.cx)
     .attr("cy", d=>d.cy);
 }
 
-export const drawValue = (svg, value, size, color) =>{
+export const drawValue = (svg, rv, size, color, lang) =>{
+  const translates = i18n(lang|| 'en');
+  const value = rv ? Math.floor(rv) + ":" + String(Math.round((rv - Math.floor(rv))*60)).padStart(2, '0') : translates["noGPS"];
   const labels = svg.selectAll('.azLabels');
   const databoundLabels = labels.data([{l:value, x:size/2, y:size/2}]);
   databoundLabels.enter().append('text').attr('class','azLabels');;
@@ -82,7 +85,7 @@ export const drawValue = (svg, value, size, color) =>{
   databoundLabels
     .attr("x", (d) =>{ return d.x; })
     .attr("y", (d) =>{ return d.y; })
-    .attr("fill", (d) =>{ return color; })
+    .attr("fill", (d) =>{ return color || "#F00"; })
     .attr("font-size", "1em")
     .attr("font-family", "Arial")
     .attr("font-weight", "bold")

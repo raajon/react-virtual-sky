@@ -190,5 +190,6 @@
   "equirectangular": "",
   "mollweide": "مولويد",
   "planechart": "خارطة مستوية"
- }
+ },
+ "noGPS": "No GPS"
 }

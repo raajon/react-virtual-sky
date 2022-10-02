@@ -1,6 +1,6 @@
 import {interpolate} from './projections.js';
 import {radec2xy} from './projections.js';
-import {i18n} from './i18n.js';
+import {i18n} from '../i18n/i18n.js';
 import d3 from 'd3'
 
 const d2r = Math.PI/180;
